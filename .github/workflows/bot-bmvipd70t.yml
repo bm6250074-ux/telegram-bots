@@ -26,13 +26,19 @@ jobs:
         working-directory: bots/bmvipd70t
         run: pip install -r requirements.txt
       - name: Run bot
+        id: run
         working-directory: bots/bmvipd70t
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN_BMVIPD70T }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: timeout 340m python bot.py || true
+        run: |
+          start=$(date +%s)
+          timeout 340m python bot.py || true
+          elapsed=$(( $(date +%s) - start ))
+          echo "elapsed=$elapsed" >> "$GITHUB_OUTPUT"
+          if [ "$elapsed" -lt 120 ]; then echo "::error::Bot stopped too early - read the log above"; exit 1; fi
       - name: Restart
-        if: always()
+        if: always() && steps.run.outputs.elapsed > 120
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run bot-bmvipd70t.yml --repo ${{ github.repository }}
