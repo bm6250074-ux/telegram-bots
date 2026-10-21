@@ -22,7 +22,7 @@ DEFAULTS = {
     "leaveban": True, "welcome": True, "bye": True, "service": True,
     "max_warns": 3,
     "flood_n": 6, "flood_s": 8, "spam_mute": 10,
-    "welcome_text": "", "bye_text": "",
+    "welcome_text": "", "bye_text": "", "rules": "",
     "welcome_media": None, "bye_media": None,
     "banned": {},   # كلمة -> مدة الكتم بالدقائق (0 = حذف وتحذير فقط)
     "allow": [],    # نطاقات روابط مسموحة
@@ -63,6 +63,8 @@ T = {
  "warns": "📊 تحذيرات {user}: {n}/{max}",
  "no_words": "لا توجد كلمات محظورة.", "words": "🚫 الكلمات المحظورة:\n{list}",
  "w_add": "✅ أُضيفت الكلمة «{w}» ({m}).", "w_del": "✅ حُذفت الكلمة «{w}».",
+ "rules_title": "📜 قوانين المجموعة:\n\n{rules}", "no_rules": "لم يضع المشرفون قوانين بعد.",
+ "rules_set": "✅ تم حفظ القوانين.", "rules_off": "✅ تم حذف القوانين.",
  "w_none": "الكلمة غير موجودة.", "w_warnonly": "حذف وتحذير فقط",
  "no_domains": "لا توجد نطاقات مسموحة.", "domains": "🔗 النطاقات المسموحة:\n{list}",
  "d_add": "✅ تم السماح بـ {d}.", "d_del": "✅ تم منع {d}.",
@@ -74,7 +76,7 @@ T = {
  "s_bye": "الوداع", "s_service": "حذف رسائل الانضمام",
  "set_info": "⚙️ إعدادات المجموعة\n\n⚠️ الحد الأقصى للتحذيرات: {mw}\n🚨 السبام: {fn} رسائل خلال {fs} ثانية ← كتم {sm} دقيقة\n\nاللغة والخيارات من الأزرار، وللمزيد: /help",
  "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
- "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة معرّفه الرقمي):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword المدة الكلمة — إضافة كلمة محظورة (مثال: /addword 60m كلمة) والمدة 0 = حذف وتحذير بلا كتم\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
+ "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة معرّفه الرقمي):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword المدة الكلمة — إضافة كلمة محظورة (مثال: /addword 60m كلمة) والمدة 0 = حذف وتحذير بلا كتم\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
 },
 "en": {
  "units": ("min", "h", "d"),
@@ -104,6 +106,8 @@ T = {
  "warns": "📊 Warnings of {user}: {n}/{max}",
  "no_words": "No banned words.", "words": "🚫 Banned words:\n{list}",
  "w_add": "✅ Word «{w}» added ({m}).", "w_del": "✅ Word «{w}» removed.",
+ "rules_title": "📜 Group rules:\n\n{rules}", "no_rules": "The admins have not set any rules yet.",
+ "rules_set": "✅ Rules saved.", "rules_off": "✅ Rules removed.",
  "w_none": "Word not found.", "w_warnonly": "delete and warn only",
  "no_domains": "No allowed domains.", "domains": "🔗 Allowed domains:\n{list}",
  "d_add": "✅ {d} is now allowed.", "d_del": "✅ {d} is no longer allowed.",
@@ -115,7 +119,7 @@ T = {
  "s_bye": "Goodbye", "s_service": "Delete join/leave notices",
  "set_info": "⚙️ Group settings\n\n⚠️ Max warnings: {mw}\n🚨 Spam: {fn} messages in {fs} s → mute {sm} min\n\nUse the buttons for language and options. More: /help",
  "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nSend me a photo here to get its file_id.",
- "help": "🛡 Admin commands (reply to the member's message or write their numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword time word — add a banned word (e.g. /addword 60m word); time 0 = delete and warn only\n/delword word — remove a word\n/words — list words\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setwelcome text — welcome message ({name} {group} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\nReset welcome text: /setwelcome default",
+ "help": "🛡 Admin commands (reply to the member's message or write their numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword time word — add a banned word (e.g. /addword 60m word); time 0 = delete and warn only\n/delword word — remove a word\n/words — list words\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\nReset welcome text: /setwelcome default",
 },
 "fr": {
  "units": ("min", "h", "j"),
@@ -145,6 +149,8 @@ T = {
  "warns": "📊 Avertissements de {user} : {n}/{max}",
  "no_words": "Aucun mot interdit.", "words": "🚫 Mots interdits :\n{list}",
  "w_add": "✅ Mot «{w}» ajouté ({m}).", "w_del": "✅ Mot «{w}» supprimé.",
+ "rules_title": "📜 Règles du groupe :\n\n{rules}", "no_rules": "Les admins n'ont pas encore défini de règles.",
+ "rules_set": "✅ Règles enregistrées.", "rules_off": "✅ Règles supprimées.",
  "w_none": "Mot introuvable.", "w_warnonly": "suppression et avertissement seulement",
  "no_domains": "Aucun domaine autorisé.", "domains": "🔗 Domaines autorisés :\n{list}",
  "d_add": "✅ {d} autorisé.", "d_del": "✅ {d} n'est plus autorisé.",
@@ -185,6 +191,8 @@ T = {
  "warns": "📊 {user} uyarıları: {n}/{max}",
  "no_words": "Yasaklı kelime yok.", "words": "🚫 Yasaklı kelimeler:\n{list}",
  "w_add": "✅ «{w}» eklendi ({m}).", "w_del": "✅ «{w}» silindi.",
+ "rules_title": "📜 Grup kuralları:\n\n{rules}", "no_rules": "Yöneticiler henüz kural belirlemedi.",
+ "rules_set": "✅ Kurallar kaydedildi.", "rules_off": "✅ Kurallar silindi.",
  "w_none": "Kelime bulunamadı.", "w_warnonly": "sadece sil ve uyar",
  "no_domains": "İzinli alan adı yok.", "domains": "🔗 İzinli alan adları:\n{list}",
  "d_add": "✅ {d} artık izinli.", "d_del": "✅ {d} artık izinli değil.",
@@ -379,7 +387,8 @@ async def send_media(ctx, cid, media, text, markup=None):
 
 def render(tpl, user, chat):
     return (html.escape(tpl).replace("{name}", mention(user))
-            .replace("{group}", html.escape(chat.title or "")).replace("{id}", str(user.id)))
+            .replace("{group}", html.escape(chat.title or "")).replace("{id}", str(user.id))
+            .replace("{rules}", html.escape(cfg(chat.id)["rules"])))
 
 
 adm_cache = {}
@@ -691,6 +700,9 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         return await m.reply_text(tr(cid, "help"))
     if cmd == "about":
         return await m.reply_text(CREDIT)
+    if cmd == "rules":
+        r = cfg(cid)["rules"]
+        return await m.reply_text(tr(cid, "rules_title", rules=r) if r else tr(cid, "no_rules"))
     if not await is_admin(ctx, cid, me.id):
         return
     c = cfg(cid)
@@ -737,6 +749,16 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             c["allow"].remove(d)
         touch()
         return await m.reply_text(tr(cid, "d_add" if cmd == "allow" else "d_del", d=d))
+    if cmd == "setrules":
+        if not body:
+            return await usage("/setrules text  |  /setrules off")
+        if body.lower() == "off":
+            c["rules"] = ""
+            touch()
+            return await m.reply_text(tr(cid, "rules_off"))
+        c["rules"] = body[:3000]
+        touch()
+        return await m.reply_text(tr(cid, "rules_set"))
     if cmd in ("setwelcome", "setbye"):
         key = "welcome_text" if cmd == "setwelcome" else "bye_text"
         if not body:
@@ -860,7 +882,7 @@ app.add_handler(MessageHandler(G & (filters.StatusUpdate.NEW_CHAT_MEMBERS | filt
 app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn", "unwarn", "resetwarns",
                                 "reset", "warns", "del"], mod, G))
 app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
-                                "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about"],
+                                "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules"],
                                conf, G))
 app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg):"))
 app.add_handler(MessageHandler(filters.ChatType.PRIVATE & (filters.PHOTO | filters.ANIMATION | filters.VIDEO |
