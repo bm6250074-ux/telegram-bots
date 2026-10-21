@@ -35,7 +35,7 @@
    "flood_n": 6,
    "flood_s": 8,
    "spam_mute": 10,
-   "welcome_text": "اهلا بك",
+   "welcome_text": "text",
    "bye_text": "",
    "welcome_media": null,
    "bye_media": null,
