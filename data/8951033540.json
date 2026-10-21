@@ -37,7 +37,10 @@
    "spam_mute": 10,
    "welcome_text": "اهلا وسهلا بك \nAgACAgQAAyEFAATprBYIAAMVatlH2l3N5Ku1iJ5OtxyuJbqxn3AAAk4Raxv4NMlSb7Xouwl-hOwBAAMCAAN5AAM9BA",
    "bye_text": "{name} غادر مجموعتنا، نتمنى له كل التوفيق والنجاح في خطواته القادمة! 🌟👋",
-   "welcome_media": null,
+   "welcome_media": [
+    "photo",
+    "AgACAgQAAyEFAATprBYIAAMVatlH2l3N5Ku1iJ5OtxyuJbqxn3AAAk4Raxv4NMlSb7Xouwl-hOwBAAMCAAN5AAM9BA"
+   ],
    "bye_media": null,
    "banned": {},
    "allow": []
