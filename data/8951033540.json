@@ -39,9 +39,7 @@
    "bye_text": "",
    "welcome_media": null,
    "bye_media": null,
-   "banned": {
-    "word": 60
-   },
+   "banned": {},
    "allow": []
   }
  },
