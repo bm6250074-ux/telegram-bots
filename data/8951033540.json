@@ -1,0 +1,47 @@
+{
+ "chats": {
+  "-1004499749032": {
+   "lang": "ar",
+   "links": true,
+   "promo": true,
+   "spam": true,
+   "words": true,
+   "leaveban": true,
+   "welcome": true,
+   "bye": true,
+   "service": true,
+   "max_warns": 3,
+   "flood_n": 6,
+   "flood_s": 8,
+   "spam_mute": 10,
+   "welcome_text": "",
+   "bye_text": "",
+   "welcome_media": null,
+   "bye_media": null,
+   "banned": {},
+   "allow": []
+  },
+  "-1003920369160": {
+   "lang": "ar",
+   "links": true,
+   "promo": true,
+   "spam": true,
+   "words": true,
+   "leaveban": true,
+   "welcome": true,
+   "bye": true,
+   "service": true,
+   "max_warns": 3,
+   "flood_n": 6,
+   "flood_s": 8,
+   "spam_mute": 10,
+   "welcome_text": "",
+   "bye_text": "",
+   "welcome_media": null,
+   "bye_media": null,
+   "banned": {},
+   "allow": []
+  }
+ },
+ "warns": {}
+}
