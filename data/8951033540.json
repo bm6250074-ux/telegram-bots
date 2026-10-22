@@ -70,6 +70,30 @@
     "خرا": 70
    },
    "allow": []
+  },
+  "-1004347779307": {
+   "lang": "ar",
+   "links": true,
+   "promo": true,
+   "spam": true,
+   "words": true,
+   "leaveban": true,
+   "welcome": true,
+   "bye": true,
+   "service": true,
+   "max_warns": 3,
+   "flood_n": 6,
+   "flood_s": 8,
+   "spam_mute": 10,
+   "welcome_text": "",
+   "bye_text": "",
+   "rules": "",
+   "welcome_media": null,
+   "bye_media": null,
+   "banned": {
+    "خول": 60
+   },
+   "allow": []
   }
  },
  "warns": {}
