@@ -161,6 +161,34 @@
     "AgACAgQAAyEFAATlitNJAAMGatokhVhy-3gwrFxYOTWNRf0nMMcAAqwQaxsNI9FS4RAwV-egCKEBAAMCAAN3AAM9BA"
    ],
    "bye_media": null,
+   "banned": {
+    "كلب": 30,
+    "حيوان": 50
+   },
+   "allow": []
+  },
+  "-1004402511210": {
+   "lang": "ar",
+   "links": true,
+   "promo": true,
+   "spam": true,
+   "words": true,
+   "leaveban": true,
+   "welcome": true,
+   "bye": true,
+   "service": true,
+   "max_warns": 3,
+   "flood_n": 6,
+   "flood_s": 8,
+   "spam_mute": 10,
+   "welcome_text": "",
+   "bye_text": "",
+   "rules": "",
+   "word_mute": 60,
+   "ttl": 0,
+   "periodic": null,
+   "welcome_media": null,
+   "bye_media": null,
    "banned": {},
    "allow": []
   }
