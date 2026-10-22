@@ -156,7 +156,10 @@
    "word_mute": 60,
    "ttl": 0,
    "periodic": null,
-   "welcome_media": null,
+   "welcome_media": [
+    "photo",
+    "AgACAgQAAyEFAATlitNJAAMGatokhVhy-3gwrFxYOTWNRf0nMMcAAqwQaxsNI9FS4RAwV-egCKEBAAMCAAN3AAM9BA"
+   ],
    "bye_media": null,
    "banned": {},
    "allow": []
