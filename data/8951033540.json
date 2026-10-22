@@ -65,7 +65,9 @@
    "rules": "",
    "welcome_media": null,
    "bye_media": null,
-   "banned": {},
+   "banned": {
+    "حيوان": 30
+   },
    "allow": []
   }
  },
