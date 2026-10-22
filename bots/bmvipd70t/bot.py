@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 from telegram import Update, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (Application, CommandHandler, MessageHandler,
-                          CallbackQueryHandler, ContextTypes, filters)
+                          CallbackQueryHandler, ChatMemberHandler, ContextTypes, filters)
 
 TOKEN = os.environ["BOT_TOKEN"]
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -24,7 +24,7 @@ DEFAULTS = {
     "flood_n": 6, "flood_s": 8, "spam_mute": 10,
     "welcome_text": "", "bye_text": "", "rules": "",
     "word_mute": 60,    # مدة الكتم الافتراضية للكلمة المضافة بلا مدة
-    "ttl": 30,          # حذف ردود البوت تلقائيًا بعد (ثانية)، 0 = لا تُحذف
+    "ttl": 0,           # حذف ردود البوت تلقائيًا بعد (ثانية)، 0 = لا تُحذف (يُفعَّل بـ /setautodel)
     "periodic": None,   # الرسالة الدورية
     "welcome_media": None, "bye_media": None,
     "banned": {},   # كلمة -> مدة الكتم بالدقائق (0 = حذف وتحذير فقط)
@@ -277,6 +277,11 @@ def load():
             data = json.load(open("data.json", encoding="utf-8"))
         data.setdefault("chats", {})
         data.setdefault("warns", {})
+        if data.get("v", 0) < 2:  # ترحيل: إيقاف الحذف التلقائي للردود في المجموعات القديمة
+            for _c in data["chats"].values():
+                _c["ttl"] = 0
+            data["v"] = 2
+            touch()
         loaded = True
         log.info("data loaded")
     except Exception as e:
@@ -582,39 +587,93 @@ async def guard(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 # =====================================================================
 #  الترحيب والوداع وحظر من يغادر
 # =====================================================================
+recent = {}
+
+
+def fresh(cid, uid, kind):
+    """يمنع تكرار نفس الحدث إذا وصل من مصدرين (رسالة خدمة + تحديث عضوية)."""
+    now = time.time()
+    k = (cid, uid, kind)
+    if now - recent.get(k, 0) < 30:
+        return False
+    if len(recent) > 2000:
+        recent.clear()
+    recent[k] = now
+    return True
+
+
+def was_member(cm):
+    return cm.status in ("member", "administrator", "creator") or (
+        cm.status == "restricted" and bool(getattr(cm, "is_member", False)))
+
+
+async def bot_joined(ctx, cid):
+    if fresh(cid, ctx.bot.id, "joined"):
+        await ctx.bot.send_message(cid, tr(cid, "joined") + "\n\n" + tr(cid, "help"))
+
+
+async def do_join(ctx, chat, u):
+    c = cfg(chat.id)
+    if u.is_bot or not c["welcome"] or not fresh(chat.id, u.id, "join"):
+        return
+    tpl = c["welcome_text"] or tr(chat.id, "welcome")
+    await send_media(ctx.bot, chat.id, c["welcome_media"], render(tpl, u, chat))
+
+
+async def do_leave(ctx, chat, u):
+    c, cid = cfg(chat.id), chat.id
+    if u.is_bot or not fresh(cid, u.id, "leave"):
+        return
+    text, markup = "", None
+    if c["bye"]:
+        text = render(c["bye_text"] or tr(cid, "bye"), u, chat)
+    if c["leaveban"]:
+        try:
+            await ctx.bot.ban_chat_member(cid, u.id)
+            text = (text + "\n\n" if text else "") + html.escape(tr(cid, "left_note")) + f"\n🆔 <code>{u.id}</code>"
+            markup = InlineKeyboardMarkup([[btn(cid, "b_unban", f"ub:{u.id}")]])
+        except Exception as e:
+            log.warning("leave-ban failed: %s", e)
+    if text:
+        await send_media(ctx.bot, cid, c["bye_media"] if c["bye"] else None, text, markup)
+
+
 async def service(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     msg, chat = update.effective_message, update.effective_chat
     c = cfg(chat.id)
-    cid = chat.id
     for u in msg.new_chat_members or []:
-        if u.id == ctx.bot.id:  # البوت نفسه دخل المجموعة
-            await ctx.bot.send_message(cid, tr(cid, "joined") + "\n\n" + tr(cid, "help"))
-            continue
-        if u.is_bot or not c["welcome"]:
-            continue
-        tpl = c["welcome_text"] or tr(cid, "welcome")
-        await send_media(ctx.bot, cid, c["welcome_media"], render(tpl, u, chat))
+        if u.id == ctx.bot.id:
+            await bot_joined(ctx, chat.id)
+        else:
+            await do_join(ctx, chat, u)
     u = msg.left_chat_member
-    if u and not u.is_bot and msg.from_user and msg.from_user.id == u.id:  # غادر بنفسه
-        text, markup, banned = "", None, False
-        if c["bye"]:
-            text = render(c["bye_text"] or tr(cid, "bye"), u, chat)
-        if c["leaveban"]:
-            try:
-                await ctx.bot.ban_chat_member(cid, u.id)
-                banned = True
-                text = (text + "\n\n" if text else "") + html.escape(tr(cid, "left_note")) + f"\n🆔 <code>{u.id}</code>"
-                markup = InlineKeyboardMarkup([[btn(cid, "b_unban", f"ub:{u.id}")]])
-            except Exception as e:
-                log.warning("leave-ban failed: %s", e)
-        if text:
-            await send_media(ctx.bot, cid, c["bye_media"] if c["bye"] else None, text, markup)
+    if u and msg.from_user and msg.from_user.id == u.id:  # غادر بنفسه
+        await do_leave(ctx, chat, u)
     if c["service"]:
         try:
             await msg.delete()
         except Exception:
             pass
 
+
+async def member_update(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    """يصل حتى في المجموعات الكبيرة التي لا تُرسَل فيها رسائل الانضمام (يتطلب أن يكون البوت مشرفًا)."""
+    cmu = update.chat_member
+    if not cmu or cmu.chat.type not in ("group", "supergroup"):
+        return
+    old, new = cmu.old_chat_member, cmu.new_chat_member
+    u = new.user
+    if not was_member(old) and was_member(new):
+        await do_join(ctx, cmu.chat, u)
+    elif was_member(old) and new.status == "left" and cmu.from_user and cmu.from_user.id == u.id:
+        await do_leave(ctx, cmu.chat, u)
+
+
+async def my_member_update(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    cmu = update.my_chat_member
+    if cmu and cmu.chat.type in ("group", "supergroup") and \
+            not was_member(cmu.old_chat_member) and was_member(cmu.new_chat_member):
+        await bot_joined(ctx, cmu.chat.id)
 
 
 # =====================================================================
@@ -1022,6 +1081,8 @@ app = Application.builder().token(TOKEN).post_init(post_init).post_shutdown(post
 app.add_error_handler(on_error)
 app.add_handler(CommandHandler("start", start, filters.ChatType.PRIVATE))
 app.add_handler(MessageHandler(G & (filters.StatusUpdate.NEW_CHAT_MEMBERS | filters.StatusUpdate.LEFT_CHAT_MEMBER), service))
+app.add_handler(ChatMemberHandler(member_update, ChatMemberHandler.CHAT_MEMBER))
+app.add_handler(ChatMemberHandler(my_member_update, ChatMemberHandler.MY_CHAT_MEMBER))
 app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn", "unwarn", "resetwarns",
                                 "reset", "warns", "del"], mod, G))
 app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
@@ -1032,4 +1093,4 @@ app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg):"))
 app.add_handler(MessageHandler(filters.ChatType.PRIVATE & (filters.PHOTO | filters.ANIMATION | filters.VIDEO |
                                                            filters.Sticker.ALL), get_id))
 app.add_handler(MessageHandler(G & ~filters.COMMAND & ~filters.StatusUpdate.ALL, guard), group=1)
-app.run_polling(drop_pending_updates=True)
+app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=False)
