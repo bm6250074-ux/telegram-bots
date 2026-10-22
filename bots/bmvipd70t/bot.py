@@ -23,6 +23,9 @@ DEFAULTS = {
     "max_warns": 3,
     "flood_n": 6, "flood_s": 8, "spam_mute": 10,
     "welcome_text": "", "bye_text": "", "rules": "",
+    "word_mute": 60,    # مدة الكتم الافتراضية للكلمة المضافة بلا مدة
+    "ttl": 30,          # حذف ردود البوت تلقائيًا بعد (ثانية)، 0 = لا تُحذف
+    "periodic": None,   # الرسالة الدورية
     "welcome_media": None, "bye_media": None,
     "banned": {},   # كلمة -> مدة الكتم بالدقائق (0 = حذف وتحذير فقط)
     "allow": [],    # نطاقات روابط مسموحة
@@ -65,6 +68,9 @@ T = {
  "w_add": "✅ أُضيفت الكلمة «{w}» ({m}).", "w_del": "✅ حُذفت الكلمة «{w}».",
  "rules_title": "📜 قوانين المجموعة:\n\n{rules}", "no_rules": "لم يضع المشرفون قوانين بعد.",
  "rules_set": "✅ تم حفظ القوانين.", "rules_off": "✅ تم حذف القوانين.",
+ "joined": "✅ تم دخولي إلى المجموعة!\n\n⚠️ لأعمل بشكل صحيح اجعلني مشرفًا بصلاحيات: حذف الرسائل، حظر الأعضاء، تقييد الأعضاء.\n\n🌐 اكتب /settings لتغيير اللغة والخيارات.\n\nهذه أوامري:",
+ "words_added": "✅ أُضيفت {n} كلمة:\n{list}", "words_bad": "⚠️ تم تجاهل {n} سطر غير صالح.",
+ "periodic_set": "✅ ستُرسَل الرسالة الدورية كل {every}.", "periodic_off": "✅ تم إيقاف الرسالة الدورية.",
  "w_none": "الكلمة غير موجودة.", "w_warnonly": "حذف وتحذير فقط",
  "no_domains": "لا توجد نطاقات مسموحة.", "domains": "🔗 النطاقات المسموحة:\n{list}",
  "d_add": "✅ تم السماح بـ {d}.", "d_del": "✅ تم منع {d}.",
@@ -76,7 +82,7 @@ T = {
  "s_bye": "الوداع", "s_service": "حذف رسائل الانضمام",
  "set_info": "⚙️ إعدادات المجموعة\n\n⚠️ الحد الأقصى للتحذيرات: {mw}\n🚨 السبام: {fn} رسائل خلال {fs} ثانية ← كتم {sm} دقيقة\n\nاللغة والخيارات من الأزرار، وللمزيد: /help",
  "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
- "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة معرّفه الرقمي):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword المدة الكلمة — إضافة كلمة محظورة (مثال: /addword 60m كلمة) والمدة 0 = حذف وتحذير بلا كتم\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
+ "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة معرّفه الرقمي):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/setperiodic المدة نص — رسالة تتكرر كل فترة (مثل 2h)، أو بالرد على صورة/رسالة. و/setperiodic off لإيقافها\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
 },
 "en": {
  "units": ("min", "h", "d"),
@@ -108,6 +114,9 @@ T = {
  "w_add": "✅ Word «{w}» added ({m}).", "w_del": "✅ Word «{w}» removed.",
  "rules_title": "📜 Group rules:\n\n{rules}", "no_rules": "The admins have not set any rules yet.",
  "rules_set": "✅ Rules saved.", "rules_off": "✅ Rules removed.",
+ "joined": "✅ I have joined the group!\n\n⚠️ To work properly make me an admin with: delete messages, ban users, restrict users.\n\n🌐 Type /settings to change the language and options.\n\nHere are my commands:",
+ "words_added": "✅ {n} words added:\n{list}", "words_bad": "⚠️ {n} invalid lines were ignored.",
+ "periodic_set": "✅ The recurring message will be sent every {every}.", "periodic_off": "✅ The recurring message was turned off.",
  "w_none": "Word not found.", "w_warnonly": "delete and warn only",
  "no_domains": "No allowed domains.", "domains": "🔗 Allowed domains:\n{list}",
  "d_add": "✅ {d} is now allowed.", "d_del": "✅ {d} is no longer allowed.",
@@ -119,7 +128,7 @@ T = {
  "s_bye": "Goodbye", "s_service": "Delete join/leave notices",
  "set_info": "⚙️ Group settings\n\n⚠️ Max warnings: {mw}\n🚨 Spam: {fn} messages in {fs} s → mute {sm} min\n\nUse the buttons for language and options. More: /help",
  "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nSend me a photo here to get its file_id.",
- "help": "🛡 Admin commands (reply to the member's message or write their numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword time word — add a banned word (e.g. /addword 60m word); time 0 = delete and warn only\n/delword word — remove a word\n/words — list words\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\nReset welcome text: /setwelcome default",
+ "help": "🛡 Admin commands (reply to the member's message or write their numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/setperiodic time text — a message repeated every period (e.g. 2h), or reply to a photo/message. /setperiodic off to stop it\n/setautodel seconds — auto-delete bot replies (off to disable)\nReset welcome text: /setwelcome default",
 },
 "fr": {
  "units": ("min", "h", "j"),
@@ -151,6 +160,9 @@ T = {
  "w_add": "✅ Mot «{w}» ajouté ({m}).", "w_del": "✅ Mot «{w}» supprimé.",
  "rules_title": "📜 Règles du groupe :\n\n{rules}", "no_rules": "Les admins n'ont pas encore défini de règles.",
  "rules_set": "✅ Règles enregistrées.", "rules_off": "✅ Règles supprimées.",
+ "joined": "✅ Je suis dans le groupe !\n\n⚠️ Pour fonctionner, faites de moi un admin (supprimer, bannir, restreindre).\n\n🌐 Tapez /settings pour la langue et les options.\n\nVoici mes commandes :",
+ "words_added": "✅ {n} mots ajoutés :\n{list}", "words_bad": "⚠️ {n} lignes invalides ignorées.",
+ "periodic_set": "✅ Le message récurrent sera envoyé toutes les {every}.", "periodic_off": "✅ Message récurrent désactivé.",
  "w_none": "Mot introuvable.", "w_warnonly": "suppression et avertissement seulement",
  "no_domains": "Aucun domaine autorisé.", "domains": "🔗 Domaines autorisés :\n{list}",
  "d_add": "✅ {d} autorisé.", "d_del": "✅ {d} n'est plus autorisé.",
@@ -193,6 +205,9 @@ T = {
  "w_add": "✅ «{w}» eklendi ({m}).", "w_del": "✅ «{w}» silindi.",
  "rules_title": "📜 Grup kuralları:\n\n{rules}", "no_rules": "Yöneticiler henüz kural belirlemedi.",
  "rules_set": "✅ Kurallar kaydedildi.", "rules_off": "✅ Kurallar silindi.",
+ "joined": "✅ Gruba katıldım!\n\n⚠️ Düzgün çalışmam için beni yönetici yapın (mesaj silme, yasaklama, kısıtlama).\n\n🌐 Dil ve seçenekler için /settings yazın.\n\nKomutlarım:",
+ "words_added": "✅ {n} kelime eklendi:\n{list}", "words_bad": "⚠️ {n} geçersiz satır yok sayıldı.",
+ "periodic_set": "✅ Tekrarlayan mesaj her {every} gönderilecek.", "periodic_off": "✅ Tekrarlayan mesaj kapatıldı.",
  "w_none": "Kelime bulunamadı.", "w_warnonly": "sadece sil ve uyar",
  "no_domains": "İzinli alan adı yok.", "domains": "🔗 İzinli alan adları:\n{list}",
  "d_add": "✅ {d} artık izinli.", "d_del": "✅ {d} artık izinli değil.",
@@ -374,15 +389,15 @@ def media_of(m):
     return None
 
 
-async def send_media(ctx, cid, media, text, markup=None):
+async def send_media(bot, cid, media, text, markup=None):
     if media:
-        fn = {"photo": ctx.bot.send_photo, "video": ctx.bot.send_video,
-              "animation": ctx.bot.send_animation}.get(media[0])
+        fn = {"photo": bot.send_photo, "video": bot.send_video,
+              "animation": bot.send_animation}.get(media[0])
         try:
             return await fn(cid, media[1], caption=text, parse_mode="HTML", reply_markup=markup)
         except Exception as e:
             log.warning("media send failed: %s", e)
-    return await ctx.bot.send_message(cid, text, parse_mode="HTML", reply_markup=markup)
+    return await bot.send_message(cid, text, parse_mode="HTML", reply_markup=markup)
 
 
 def render(tpl, user, chat):
@@ -572,10 +587,13 @@ async def service(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     c = cfg(chat.id)
     cid = chat.id
     for u in msg.new_chat_members or []:
+        if u.id == ctx.bot.id:  # البوت نفسه دخل المجموعة
+            await ctx.bot.send_message(cid, tr(cid, "joined") + "\n\n" + tr(cid, "help"))
+            continue
         if u.is_bot or not c["welcome"]:
             continue
         tpl = c["welcome_text"] or tr(cid, "welcome")
-        await send_media(ctx, cid, c["welcome_media"], render(tpl, u, chat))
+        await send_media(ctx.bot, cid, c["welcome_media"], render(tpl, u, chat))
     u = msg.left_chat_member
     if u and not u.is_bot and msg.from_user and msg.from_user.id == u.id:  # غادر بنفسه
         text, markup, banned = "", None, False
@@ -590,7 +608,7 @@ async def service(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             except Exception as e:
                 log.warning("leave-ban failed: %s", e)
         if text:
-            await send_media(ctx, cid, c["bye_media"] if c["bye"] else None, text, markup)
+            await send_media(ctx.bot, cid, c["bye_media"] if c["bye"] else None, text, markup)
     if c["service"]:
         try:
             await msg.delete()
@@ -598,10 +616,95 @@ async def service(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             pass
 
 
+
+# =====================================================================
+#  حذف الأوامر والردود تلقائيًا + أدوات القوائم
+# =====================================================================
+async def try_delete(msg):
+    try:
+        await msg.delete()
+    except Exception:
+        pass
+
+
+async def _later_delete(msg, secs):
+    await asyncio.sleep(secs)
+    await try_delete(msg)
+
+
+def make_reply(ctx, cid):
+    """يرسل رد البوت دون الاعتماد على رسالة الأمر (لأنها تُحذف)، ويحذف الرد تلقائيًا."""
+    async def reply(text, parse_mode=None, reply_markup=None, long=False, keep=None, ttl=None):
+        msg = await ctx.bot.send_message(cid, text, parse_mode=parse_mode, reply_markup=reply_markup)
+        t = cfg(cid)["ttl"]
+        if keep is None:
+            keep = reply_markup is not None
+        if ttl is None:
+            ttl = t * (4 if long else 1)
+        if t and not keep and ttl:
+            asyncio.create_task(_later_delete(msg, ttl))
+        return msg
+    return reply
+
+
+def parse_entries(body, default):
+    """كل سطر أو فاصلة = كلمة + مدة اختيارية (قبلها أو بعدها). يعيد (قاموس، عدد غير الصالح)."""
+    out, bad = {}, 0
+    for item in re.split(r"[\n,،;؛]+", body):
+        t = item.split()
+        if not t:
+            continue
+        d = None
+        if len(t) == 1 and parse_dur(t[0]) is not None:
+            bad += 1
+            continue
+        if len(t) > 1 and parse_dur(t[-1]) is not None:
+            d, t = parse_dur(t[-1]), t[:-1]
+        elif len(t) > 1 and parse_dur(t[0]) is not None:
+            d, t = parse_dur(t[0]), t[1:]
+        w = norm(" ".join(t))
+        if not w:
+            bad += 1
+            continue
+        out[w] = default if d is None else d
+    return out, bad
+
+
+async def periodic_tick(bot):
+    now = time.time()
+    for k in list(data["chats"]):
+        c = cfg(k)
+        p = c.get("periodic")
+        if not p or now - p.get("last", 0) < p["every"] * 60:
+            continue
+        p["last"] = now
+        touch()
+        cid = int(k)
+        if p.get("mid"):
+            try:
+                await bot.delete_message(cid, p["mid"])
+            except Exception:
+                pass
+        try:
+            title = (await bot.get_chat(cid)).title or ""
+            txt = (html.escape(p.get("text", "")).replace("{group}", html.escape(title))
+                   .replace("{rules}", html.escape(c["rules"])))
+            msg = await send_media(bot, cid, p.get("media"), txt)
+            p["mid"] = msg.message_id
+        except Exception as e:
+            log.warning("periodic send failed: %s", e)
+
+
+async def periodic_loop(app):
+    while True:
+        await asyncio.sleep(30)
+        if loaded:
+            await periodic_tick(app.bot)
+
 # =====================================================================
 #  أوامر الإشراف
 # =====================================================================
-async def resolve(update, ctx):
+async def resolve(update, ctx, reply):
     m, cid = update.effective_message, update.effective_chat.id
     args = list(ctx.args)
     if m.reply_to_message and m.reply_to_message.from_user:
@@ -610,13 +713,15 @@ async def resolve(update, ctx):
     if args and args[0].isdigit():
         uid = int(args[0])
         return uid, await name_of(ctx, cid, uid), args[1:]
-    await m.reply_text(tr(cid, "need_target"))
+    await reply(tr(cid, "need_target"))
     return None
 
 
 async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     m, chat, me = update.effective_message, update.effective_chat, update.effective_user
     cid = chat.id
+    reply = make_reply(ctx, cid)
+    await try_delete(m)  # حذف رسالة الأمر تلقائيًا
     if not await is_admin(ctx, cid, me.id):
         return
     cmd = m.text.split()[0][1:].split("@")[0].lower()
@@ -628,7 +733,7 @@ async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 except Exception:
                     pass
         return
-    r = await resolve(update, ctx)
+    r = await resolve(update, ctx, reply)
     if not r:
         return
     uid, name, rest = r
@@ -637,30 +742,30 @@ async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     ment = mention_id(uid, name)
     c = cfg(cid)
     if cmd in ("ban", "kick", "mute", "warn") and await is_admin(ctx, cid, uid):
-        return await m.reply_text(tr(cid, "is_admin"))
+        return await reply(tr(cid, "is_admin"))
     try:
         if cmd == "warns":
-            await m.reply_text(tr(cid, "warns", user=ment, n=warns_of(cid, uid), max=c["max_warns"]), parse_mode="HTML")
+            await reply(tr(cid, "warns", user=ment, n=warns_of(cid, uid), max=c["max_warns"]), parse_mode="HTML")
         elif cmd in ("resetwarns", "reset"):
             set_warns(cid, uid, 0)
-            await m.reply_text(tr(cid, "reset", user=ment, admin=mention(me)), parse_mode="HTML")
+            await reply(tr(cid, "reset", user=ment, admin=mention(me)), parse_mode="HTML")
         elif cmd == "unwarn":
             set_warns(cid, uid, warns_of(cid, uid) - 1)
-            await m.reply_text(tr(cid, "warns", user=ment, n=warns_of(cid, uid), max=c["max_warns"]), parse_mode="HTML")
+            await reply(tr(cid, "warns", user=ment, n=warns_of(cid, uid), max=c["max_warns"]), parse_mode="HTML")
         elif cmd == "unmute":
             await do_unmute(ctx, cid, uid)
-            await m.reply_text(tr(cid, "unmuted", user=ment, admin=mention(me)), parse_mode="HTML")
+            await reply(tr(cid, "unmuted", user=ment, admin=mention(me)), parse_mode="HTML")
         elif cmd == "unban":
             await ctx.bot.unban_chat_member(cid, uid, only_if_banned=True)
-            await m.reply_text(tr(cid, "unbanned", user=ment, admin=mention(me)), parse_mode="HTML")
+            await reply(tr(cid, "unbanned", user=ment, admin=mention(me)), parse_mode="HTML")
         elif cmd == "kick":
             await ctx.bot.ban_chat_member(cid, uid)
             await ctx.bot.unban_chat_member(cid, uid, only_if_banned=True)
-            await m.reply_text(tr(cid, "kicked", user=ment), parse_mode="HTML")
+            await reply(tr(cid, "kicked", user=ment), parse_mode="HTML")
         elif cmd == "ban":
             reason = html.escape(" ".join(rest)) or tr(cid, "r_admin")
             await ctx.bot.ban_chat_member(cid, uid)
-            await m.reply_text(tr(cid, "banned", user=ment, reason=reason), parse_mode="HTML",
+            await reply(tr(cid, "banned", user=ment, reason=reason), parse_mode="HTML",
                                reply_markup=InlineKeyboardMarkup([[btn(cid, "b_unban", f"ub:{uid}")]]))
         elif cmd == "mute":
             dur = 60
@@ -669,13 +774,13 @@ async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 rest = rest[1:]
             reason = html.escape(" ".join(rest)) or tr(cid, "r_admin")
             await do_mute(ctx, cid, uid, dur)
-            await m.reply_text(tr(cid, "mutedu", user=ment, dur=fmt_dur(cid, dur), reason=reason), parse_mode="HTML",
+            await reply(tr(cid, "mutedu", user=ment, dur=fmt_dur(cid, dur), reason=reason), parse_mode="HTML",
                                reply_markup=InlineKeyboardMarkup([[btn(cid, "b_unmute", f"um:{uid}")]]))
         elif cmd == "warn":
             reason = html.escape(" ".join(rest)) or tr(cid, "r_admin")
             await punish(ctx, cid, uid, name, reason, 0)
     except Exception as e:
-        await m.reply_text(tr(cid, "fail", err=str(e)[:200]))
+        await reply(tr(cid, "fail", err=str(e)[:200]))
 
 
 # =====================================================================
@@ -695,14 +800,16 @@ def panel(cid):
 async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     m, chat, me = update.effective_message, update.effective_chat, update.effective_user
     cid = chat.id
+    reply = make_reply(ctx, cid)
+    await try_delete(m)  # حذف رسالة الأمر تلقائيًا
     cmd = m.text.split()[0][1:].split("@")[0].lower()
     if cmd == "help":
-        return await m.reply_text(tr(cid, "help"))
+        return await reply(tr(cid, "help"), long=True)
     if cmd == "about":
-        return await m.reply_text(CREDIT)
+        return await reply(CREDIT)
     if cmd == "rules":
         r = cfg(cid)["rules"]
-        return await m.reply_text(tr(cid, "rules_title", rules=r) if r else tr(cid, "no_rules"))
+        return await reply(tr(cid, "rules_title", rules=r) if r else tr(cid, "no_rules"), long=True)
     if not await is_admin(ctx, cid, me.id):
         return
     c = cfg(cid)
@@ -711,35 +818,70 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     body = parts[1].strip() if len(parts) > 1 else ""
 
     def usage(u):
-        return m.reply_text(tr(cid, "usage", u=u))
+        return reply(tr(cid, "usage", u=u))
 
     if cmd in ("settings", "lang"):
         t, kb = panel(cid)
-        return await m.reply_text(t, reply_markup=kb)
+        return await reply(t, reply_markup=kb, keep=False, ttl=300)
     if cmd == "addword":
-        d = parse_dur(a[0]) if a else None
-        w = norm(" ".join(a[1:]))
-        if d is None or not w:
-            return await usage("/addword 60m word")
-        c["banned"][w] = d
+        entries, bad = parse_entries(body, c["word_mute"])
+        if not entries:
+            return await usage("/addword word 60m")
+        c["banned"].update(entries)
         touch()
-        return await m.reply_text(tr(cid, "w_add", w=w, m=fmt_dur(cid, d) if d else tr(cid, "w_warnonly")))
+        lst = "\n".join(f"• {w} — {fmt_dur(cid, v) if v else tr(cid, 'w_warnonly')}" for w, v in entries.items())
+        txt = tr(cid, "words_added", n=len(entries), list=lst)
+        if bad:
+            txt += "\n" + tr(cid, "words_bad", n=bad)
+        return await reply(txt, long=True)
     if cmd == "delword":
-        w = norm(body)
-        if c["banned"].pop(w, None) is None:
-            return await m.reply_text(tr(cid, "w_none"))
+        ws = [norm(x) for x in re.split(r"[\n,،;؛]+", body) if x.strip()]
+        gone = [w for w in ws if c["banned"].pop(w, None) is not None]
+        if not gone:
+            return await reply(tr(cid, "w_none"))
         touch()
-        return await m.reply_text(tr(cid, "w_del", w=w))
+        return await reply(tr(cid, "w_del", w="، ".join(gone)))
+    if cmd == "setwordmute":
+        d = parse_dur(a[0]) if a else None
+        if d is None:
+            return await usage("/setwordmute 60m")
+        c["word_mute"] = d
+        touch()
+        return await reply(tr(cid, "ok"))
+    if cmd == "setautodel":
+        if not (a and (a[0].isdigit() or a[0].lower() == "off")):
+            return await usage("/setautodel 30  |  /setautodel off")
+        c["ttl"] = 0 if a[0].lower() == "off" else min(int(a[0]), 3600)
+        touch()
+        return await reply(tr(cid, "ok"))
+    if cmd == "setperiodic":
+        if a and a[0].lower() == "off":
+            c["periodic"] = None
+            touch()
+            return await reply(tr(cid, "periodic_off"))
+        d = parse_dur(a[0]) if a else None
+        if d is None or d < 5:
+            return await usage("/setperiodic 2h text  |  /setperiodic off")
+        sp = body.split(None, 1)
+        rest = sp[1].strip() if len(sp) > 1 else ""
+        rm = m.reply_to_message
+        media = media_of(rm) if rm else None
+        text = rest or ((rm.text or rm.caption or "") if rm else "")
+        if not text and not media:
+            return await usage("/setperiodic 2h text  |  /setperiodic off")
+        c["periodic"] = {"every": d, "text": text, "media": media, "last": 0, "mid": None}
+        touch()
+        return await reply(tr(cid, "periodic_set", every=fmt_dur(cid, d)))
     if cmd == "words":
         if not c["banned"]:
-            return await m.reply_text(tr(cid, "no_words"))
+            return await reply(tr(cid, "no_words"))
         lst = "\n".join(f"• {w} — {fmt_dur(cid, v) if v else tr(cid, 'w_warnonly')}" for w, v in c["banned"].items())
-        return await m.reply_text(tr(cid, "words", list=lst))
+        return await reply(tr(cid, "words", list=lst), long=True)
     if cmd in ("allow", "disallow"):
         if not a:
             if not c["allow"]:
-                return await m.reply_text(tr(cid, "no_domains"))
-            return await m.reply_text(tr(cid, "domains", list="\n".join("• " + d for d in c["allow"])))
+                return await reply(tr(cid, "no_domains"))
+            return await reply(tr(cid, "domains", list="\n".join("• " + d for d in c["allow"])), long=True)
         d = (urlparse(a[0] if "://" in a[0] else "http://" + a[0]).hostname or "").lower().removeprefix("www.")
         if not d:
             return await usage(f"/{cmd} example.com")
@@ -748,17 +890,17 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         if cmd == "disallow" and d in c["allow"]:
             c["allow"].remove(d)
         touch()
-        return await m.reply_text(tr(cid, "d_add" if cmd == "allow" else "d_del", d=d))
+        return await reply(tr(cid, "d_add" if cmd == "allow" else "d_del", d=d))
     if cmd == "setrules":
         if not body:
             return await usage("/setrules text  |  /setrules off")
         if body.lower() == "off":
             c["rules"] = ""
             touch()
-            return await m.reply_text(tr(cid, "rules_off"))
+            return await reply(tr(cid, "rules_off"))
         c["rules"] = body[:3000]
         touch()
-        return await m.reply_text(tr(cid, "rules_set"))
+        return await reply(tr(cid, "rules_set"))
     if cmd in ("setwelcome", "setbye"):
         key = "welcome_text" if cmd == "setwelcome" else "bye_text"
         if not body:
@@ -766,34 +908,34 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         if body.lower() == "default":
             c[key] = ""
             touch()
-            return await m.reply_text(tr(cid, "text_def"))
+            return await reply(tr(cid, "text_def"))
         c[key] = body
         touch()
-        return await m.reply_text(tr(cid, "text_set"))
+        return await reply(tr(cid, "text_set"))
     if cmd in ("setwelcomemedia", "setbyemedia"):
         key = "welcome_media" if cmd == "setwelcomemedia" else "bye_media"
         if a and a[0].lower() == "off":
             c[key] = None
             touch()
-            return await m.reply_text(tr(cid, "media_off"))
+            return await reply(tr(cid, "media_off"))
         md = media_of(m.reply_to_message) if m.reply_to_message else None
         if not md:
-            return await m.reply_text(tr(cid, "media_need"))
+            return await reply(tr(cid, "media_need"))
         c[key] = md
         touch()
-        return await m.reply_text(tr(cid, "media_set"))
+        return await reply(tr(cid, "media_set"))
     if cmd == "setwarns":
         if not (a and a[0].isdigit() and 1 <= int(a[0]) <= 20):
             return await usage("/setwarns 3")
         c["max_warns"] = int(a[0])
         touch()
-        return await m.reply_text(tr(cid, "ok"))
+        return await reply(tr(cid, "ok"))
     if cmd == "setspam":
         if len(a) != 3 or not all(x.isdigit() for x in a) or int(a[0]) < 3 or int(a[1]) < 1:
             return await usage("/setspam 6 8 10")
         c["flood_n"], c["flood_s"], c["spam_mute"] = int(a[0]), int(a[1]), int(a[2])
         touch()
-        return await m.reply_text(tr(cid, "ok"))
+        return await reply(tr(cid, "ok"))
 
 
 async def buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
@@ -867,6 +1009,7 @@ async def post_init(app):
             break
         await asyncio.sleep(3)
     asyncio.create_task(saver())
+    asyncio.create_task(periodic_loop(app))
 
 
 async def post_shutdown(app):
@@ -882,7 +1025,8 @@ app.add_handler(MessageHandler(G & (filters.StatusUpdate.NEW_CHAT_MEMBERS | filt
 app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn", "unwarn", "resetwarns",
                                 "reset", "warns", "del"], mod, G))
 app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
-                                "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules"],
+                                "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules", "setwordmute", "setautodel",
+                                "setperiodic"],
                                conf, G))
 app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg):"))
 app.add_handler(MessageHandler(filters.ChatType.PRIVATE & (filters.PHOTO | filters.ANIMATION | filters.VIDEO |
