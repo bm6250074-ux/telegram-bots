@@ -556,7 +556,10 @@
    "cheer": true,
    "cheer_i": 0,
    "chat_link": "https://t.me/Incertus_Discuss",
-   "welcome_media": null,
+   "welcome_media": [
+    "photo",
+    "AgACAgQAAyEFAATVAAGi_AAD-2rbgJzOqNZo92riTTUYtn83eyfjAAKjGWsb40fYUptgLtLQg6UUAQADAgADdwADPQQ"
+   ],
    "bye_media": null,
    "banned": {
     "يا غبي": 20,
