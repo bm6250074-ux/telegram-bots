@@ -470,7 +470,18 @@
     "كثمك": 90
    },
    "allow": [],
-   "welcome_btns": [],
+   "welcome_btns": [
+    [
+     [
+      "TikTok",
+      "https://www.tiktok.com/@.incertus"
+     ],
+     [
+      "القوانين 📜",
+      "https://t.me/Incertus_Discuss/128"
+     ]
+    ]
+   ],
    "bye_btns": [],
    "periodic_btns": [],
    "cheer": true,
