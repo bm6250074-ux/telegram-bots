@@ -160,7 +160,10 @@
     "photo",
     "AgACAgQAAyEFAATlitNJAAMGatokhVhy-3gwrFxYOTWNRf0nMMcAAqwQaxsNI9FS4RAwV-egCKEBAAMCAAN3AAM9BA"
    ],
-   "bye_media": null,
+   "bye_media": [
+    "photo",
+    "AgACAgQAAyEFAATlitNJAANIatr72BnXcrN-aKhQgZCv1h8HS2gAAn8PaxtS4tlSlcHGdVDrmfEBAAMCAAN4AAM9BA"
+   ],
    "banned": {
     "كلب": 30,
     "حيوان": 50,
