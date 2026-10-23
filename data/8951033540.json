@@ -483,7 +483,18 @@
     ]
    ],
    "bye_btns": [],
-   "periodic_btns": [],
+   "periodic_btns": [
+    [
+     [
+      "/ TikTok",
+      "https://www.tiktok.com/@.incertus"
+     ],
+     [
+      "القوانين 📜",
+      "https://t.me/Incertus_Discuss/128"
+     ]
+    ]
+   ],
    "cheer": true,
    "cheer_i": 0,
    "chat_link": "https://t.me/Incertus_Discuss"
