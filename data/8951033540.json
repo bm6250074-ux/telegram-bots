@@ -560,7 +560,10 @@
     "photo",
     "AgACAgQAAyEFAATVAAGi_AAD-2rbgJzOqNZo92riTTUYtn83eyfjAAKjGWsb40fYUptgLtLQg6UUAQADAgADdwADPQQ"
    ],
-   "bye_media": null,
+   "bye_media": [
+    "photo",
+    "AgACAgQAAyEFAATVAAGi_AAD_mrbgMMhVvPj1QACHItYIRj5qwnEAAKkGWsb40fYUtG6faEepHIkAQADAgADeAADPQQ"
+   ],
    "banned": {
     "يا غبي": 20,
     "يا اهبل": 20,
