@@ -540,7 +540,7 @@
    "welcome": true,
    "bye": true,
    "service": true,
-   "max_warns": 3,
+   "max_warns": 5,
    "flood_n": 6,
    "flood_s": 8,
    "spam_mute": 10,
