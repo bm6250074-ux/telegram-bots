@@ -893,7 +893,9 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {
+    "السلام عليكم": "و عليكم السلام و رحمة الله و بركاته"
+   }
   }
  },
  "warns": {
