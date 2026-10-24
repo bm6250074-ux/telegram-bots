@@ -541,7 +541,7 @@
     ]
    ],
    "cheer": true,
-   "cheer_i": 3,
+   "cheer_i": 0,
    "chat_link": "https://t.me/Incertus_Discuss",
    "captcha": false,
    "captcha_time": 120,
@@ -640,7 +640,7 @@
     ]
    ],
    "cheer": true,
-   "cheer_i": 1,
+   "cheer_i": 0,
    "chat_link": "https://t.me/Incertus_Discuss",
    "welcome_media": [
     "photo",
@@ -904,7 +904,7 @@
   "-1003573588732:8390019729": 2,
   "-1003573588732:8939960590": 1
  },
- "v": 2,
+ "v": 3,
  "unames": {},
  "pending": {},
  "users": {
