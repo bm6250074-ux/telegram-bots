@@ -40,67 +40,46 @@ LANGS = {"ar": "🇸🇦 العربية", "en": "🇬🇧 English", "fr": "🇫�
 TOG = ["links", "promo", "spam", "words", "leaveban", "welcome", "bye", "service", "cheer", "captcha", "rewards"]
 
 # =====================================================================
-#  رسائل التشجيع على منشورات القناة (تُرسَل بالترتيب، وعند انتهائها تبدأ من الأولى)
+#  رسائل التشجيع على منشورات القناة: خفيفة بلا رابط (تُرسَل بالترتيب، وعند انتهائها تبدأ من الأولى)
 # =====================================================================
 _OPEN = [
-    "🔥 منشور جديد وصل!", "✨ ما شاء الله على هذا المنشور!", "👏 عمل رائع كالعادة!",
-    "🌟 منشور يستحق الاهتمام!", "💎 محتوى مميز بين أيديكم!", "🚀 جديد القناة وصل، تابعوه!",
-    "🎯 منشور جديد، لا يفوّتكم!", "💫 إبداع جديد من القناة!", "🌹 تسلم الأيادي على هذا المنشور!",
-    "👑 منشور بمستوى مختلف!", "😍 يا له من منشور!", "🙌 بارك الله فيك على هذا الجهد!",
-    "⚡ وصل الجديد، تابعوه!", "💥 منشور جديد ومميز!", "🏆 دائمًا في القمة!",
-    "🌈 منشور جميل يستحق المتابعة!",
+    "استمر 💪😁", "أحسنت، كمّل 👏🔥", "أنت رائع، استمر 🌟😁", "دائمًا للأمام 🚀😄", "بارك الله فيك واستمر 🌹",
+    "تألق مستمر 😎✨", "شدّ حيلك، أنت تقدر 💪😁", "أحسنت وبارك الله جهدك 🤩", "الله يعطيك العافية 🌸",
+    "عمل جميل، واصل 👌😊", "ما شاء الله، استمر على هذا النهج 🔥", "كل الدعم لك 🤝😁", "أبدعت، وننتظر المزيد 🤗",
+    "قوة وعزيمة، استمر 💥", "يعطيك ألف عافية 🌟", "هكذا يكون العطاء 😍", "جهد مميز، واصل 🏆",
+    "فخورون بك، استمر 🥳", "لا تتوقف أبدًا 😁🔥", "أنت على الطريق الصحيح 😄👍", "تسلم يدك، واصل 🙌",
+    "نشاط وإبداع، ما شاء الله ✨😁", "استمر، والقادم أجمل 🌈", "يا سلام عليك 😍👏", "بالتوفيق دائمًا 🍀😊",
+    "نجاح تلو نجاح، استمر 🚀", "همة عالية، واصل 💪😎", "ألف شكر على جهدك 🌹😁", "رائع كالعادة 🤩",
+    "كمّل، نحن معك 🫶😁",
 ]
 _JOIN = [
-    "💬 ادخلوا مجموعة الدردشة وشاركونا رأيكم!", "🤝 انضموا لمجموعة الدردشة ولا تبقوا خارج النقاش!",
-    "👥 مجموعة الدردشة بانتظاركم، ادخلوا وتفاعلوا!", "🗨️ النقاش الحقيقي في مجموعة الدردشة، تعالوا شاركونا!",
-    "🎉 ادخلوا مجموعة الدردشة وكونوا جزءًا من العائلة!", "💌 شاركونا رأيكم بالدخول إلى مجموعة الدردشة!",
-    "🔔 لا تفوّتوا النقاش، انضموا لمجموعة الدردشة الآن!", "🌟 مجموعة الدردشة مفتوحة لكم، ادخلوا وتحدثوا معنا!",
-    "✍️ رأيكم يهمنا! ادخلوا مجموعة الدردشة وعلّقوا!", "🫶 تعالوا إلى مجموعة الدردشة، أصدقاء لطفاء بانتظاركم!",
-    "🚪 باب مجموعة الدردشة مفتوح، ادخلوا الآن!", "🔥 التفاعل الحقيقي يبدأ من مجموعة الدردشة، انضموا إلينا!",
-    "😉 هيا إلى مجموعة الدردشة، نحن بانتظاركم!", "🎈 ادخلوا مجموعة الدردشة وشاركونا أجواءها الجميلة!",
-    "📢 للمشاركة والنقاش، ادخلوا مجموعة الدردشة!", "🧡 انضموا لمجموعة الدردشة وكونوا معنا دائمًا!",
+    "وأنتم، ادخلوا المجموعة وشاركونا 😁", "المجموعة بانتظاركم 🤗", "انضموا للمجموعة وتفاعلوا معنا 💬😄",
+    "ننتظر آراءكم في المجموعة 😁", "كونوا معنا في المجموعة 🫶", "النقاش الحلو في المجموعة 😍",
+    "ادخلوا المجموعة وقولوا رأيكم 🗣️😁", "تعالوا شاركونا في المجموعة 🎉", "المجموعة مفتوحة لكم 🚪😊",
+    "لا تبقوا بعيدين، ادخلوا المجموعة 😄", "رأيكم يهمنا، شاركونا في المجموعة 💭", "فرحتنا بوجودكم في المجموعة 🥰",
+    "ادخلوا المجموعة وتفاعلوا 🔥😁", "أجواء جميلة بانتظاركم في المجموعة ✨", "شاركونا حماسكم في المجموعة 💪😄",
+    "المجموعة تحلى بوجودكم 🌹", "انضموا لنا في المجموعة 🤝😁", "ننتظر تعليقاتكم في المجموعة 💬",
+    "تفاعلكم في المجموعة يسعدنا 😊🎈", "ادخلوا المجموعة ولا تتأخروا 😁🏃", "المجموعة بدونكم ناقصة 🥺😁",
+    "شاركونا الدردشة في المجموعة 😄💬", "يا أهلًا بكم في المجموعة 🤗🌟", "تعالوا نتناقش في المجموعة 🗨️😁",
+    "صوتكم مهم، ادخلوا المجموعة 📣", "التفاعل الحقيقي في المجموعة 🙌", "نراكم في المجموعة 👋😁",
+    "كونوا جزءًا من المجموعة 🧡", "المجموعة تنتظر أفكاركم 💡😊", "هيا إلى المجموعة 😁🚀",
 ]
 _SOLO = [
-    "🔥 منشور نار! هل تودون التعليق؟ ادخلوا مجموعة الدردشة 💬",
-    "👏 تصفيق حار! والنقاش الأحلى في مجموعة الدردشة 🎤",
-    "🌟 كل المنشورات حلوة، لكن النقاش أحلى! انضموا لمجموعة الدردشة 🤗",
-    "💎 هنا يلمع المحتوى، وهناك يلمع النقاش! مجموعة الدردشة تنتظركم ✨",
-    "🎊 أهلًا بالمتابعين الأوفياء! ادخلوا مجموعة الدردشة وشاركونا 🫶",
-    "🚀 انطلقوا إلى مجموعة الدردشة وقولوا رأيكم بحرية! 🗣️",
-    "🌹 تسلمون على متابعتكم! باب مجموعة الدردشة مفتوح 🚪",
-    "😎 المتابع الذكي يدخل مجموعة الدردشة! هل أنتم منهم؟ 💬",
-    "☀️ يوم جميل مع منشور جميل! شاركونا في مجموعة الدردشة 🧡",
-    "🎯 أصبتم الهدف بمتابعتكم! خطوة واحدة تفصلكم: مجموعة الدردشة 👥",
-    "🧠 أفكاركم تهمنا! اكتبوها في مجموعة الدردشة 📝",
-    "💌 رسالة حب لكل متابع: ادخل مجموعة الدردشة وتعرّف على أصدقاء جدد 🤝",
-    "🍀 حظ سعيد لمن يدخل مجموعة الدردشة اليوم! 😄",
-    "🥳 الحفلة مستمرة في مجموعة الدردشة، ادخلوا وانضموا! 🎈",
-    "🔔 تنبيه لطيف: مجموعة الدردشة بانتظار تعليقاتكم 💭",
-    "🌈 كل يوم معكم أجمل! لا تنسوا مجموعة الدردشة 💞",
-    "⭐ نجومنا هم المتابعون! انضموا لمجموعة الدردشة وتألقوا ✨",
-    "🏅 أبطال المتابعة يتواجدون في مجموعة الدردشة، فادخلوا معهم! 🙌",
-    "🎶 النقاش يحلو بوجودكم! تعالوا إلى مجموعة الدردشة 🎵",
-    "💪 بهمتكم نكمل! ادخلوا مجموعة الدردشة وشاركونا الحماس 🔥",
-    "🤩 منشور يبهر! والتعليقات تبهر أكثر في مجموعة الدردشة 💬",
-    "🕊️ جو هادئ ونقاش لطيف في مجموعة الدردشة، تفضلوا ✨",
-    "🧩 مجموعة الدردشة قطعة ناقصة من التجربة، أكملوها بوجودكم 💛",
-    "📣 بصوت عالٍ: ادخلوا مجموعة الدردشة! 😁",
-    "🎁 هدية اليوم: نقاش ممتع في مجموعة الدردشة، فاستلموها 🎀",
-    "🌙 مساء الخير والتشجيع! دردشتنا مفتوحة لكم في مجموعة الدردشة 🌟",
-    "☕ مع فنجان قهوتكم، تعالوا إلى مجموعة الدردشة وتحدثوا معنا 😊",
-    "💫 أنتم سر نجاح القناة! شاركونا في مجموعة الدردشة 🥰",
-    "🙋 من يريد أن يشارك؟ مجموعة الدردشة جاهزة لاستقبالكم! 🎤",
-    "🌺 ذوقكم رفيع! أضيفوا لمستكم في مجموعة الدردشة 🎨",
-    "🔥 الحماس يبدأ هنا وينتشر في مجموعة الدردشة! ادخلوا 💥",
-    "🤗 مرحبًا بكل من وصل إلى هنا! بابنا الآخر هو مجموعة الدردشة 🚪",
-    "📌 خطوتكم التالية: مجموعة الدردشة، كونوا معنا 👣",
-    "🍯 حلاوة المتابعة بدخولكم مجموعة الدردشة! 😋",
-    "🎉 أنتم الأروع! مجموعة الدردشة لا تكتمل إلا بكم 💖",
-    "👀 هل شاهدتم المنشور؟ شاركونا آراءكم في مجموعة الدردشة 🗨️",
-    "🌠 أمنيات جميلة لكم، وبانتظاركم في مجموعة الدردشة 🤲",
-    "🏆 تفاعلكم هو الجائزة! ادخلوا مجموعة الدردشة وتفاعلوا 🥇",
-    "💬 دردشة لطيفة تنتظركم في مجموعة الدردشة، فتفضلوا! 😄",
-    "🧡 شكرًا لكل متابع! وللمزيد من الأجواء ادخلوا مجموعة الدردشة 🌼",
+    "استمر، وأنتم ادخلوا المجموعة وشاركونا 😁💪", "أحسنت يا بطل 👏 والمجموعة بانتظاركم 🤗",
+    "كمّل، ونراكم في المجموعة يا أحباب 😁", "تسلم، واستمر 🔥 وتفاعلوا معنا في المجموعة 💬",
+    "ما شاء الله 🌟 ادخلوا المجموعة وقولوا رأيكم 😄", "استمر على هذا الإبداع 😍 والمجموعة تنتظركم 🎉",
+    "بالتوفيق دائمًا 🍀 وشاركونا في المجموعة 😁", "جهد رائع 👌 ونحب تفاعلكم في المجموعة 🥰",
+    "يعطيك العافية 🌹 والنقاش مفتوح في المجموعة 💭", "واصل، نحن معك 🫶 وأنتم معنا في المجموعة 😁",
+    "أنت قدها 💪😎 وتعالوا نتناقش في المجموعة 🗨️", "إبداع مستمر ✨ وبانتظار آرائكم في المجموعة 😄",
+    "شكرًا لك على جهدك 🌸 والمجموعة تحلى بكم 😁", "كمل يا مبدع 🚀 والمجموعة بانتظار تعليقاتكم 💬",
+    "دائمًا مميز 🌟 وانضموا لنا في المجموعة 🤝", "فخورون بك 🥳 ونراكم في المجموعة 👋😁",
+    "هكذا نحب العطاء 😍 وشاركونا في المجموعة 🎈", "أبدعت 🔥 ونتمنى تفاعلكم في المجموعة 😊",
+    "استمر ولا تتوقف 💥 والمجموعة مفتوحة لكم 🚪😁", "نجاح جديد، استمر 🏆 وكونوا معنا في المجموعة 🧡",
+    "تحية لك 🙌 وللمتابعين: المجموعة بانتظاركم 😄", "الله يوفقك 🤲 وأنتم تعالوا للمجموعة 😁",
+    "عطاء جميل 🌹 والنقاش الأجمل في المجموعة 😍", "استمر بهذه الروح 😁🔥 وتفاعلوا في المجموعة 💬",
+    "مبدع كعادتك 🤩 ونرحب بكم في المجموعة 🤗", "كل الدعم لك 🤝 وللجميع: المجموعة تنتظركم 😊",
+    "همتك عالية 💪 وصوتكم مهم في المجموعة 📣", "واصل التألق 🌈 وشاركونا في المجموعة 😄",
+    "جميل جدًا 😍 ونتشرف بكم في المجموعة 🌟", "بارك الله جهدك 🌸 وتعالوا نتحدث في المجموعة 💭😁",
 ]
 
 
@@ -110,7 +89,7 @@ def _build_cheers():
     out, k = [], 0
     for n, text in enumerate(combos):
         out.append(text)
-        if n % 6 == 5 and k < len(_SOLO):
+        if n % 25 == 24 and k < len(_SOLO):
             out.append(_SOLO[k])
             k += 1
     return out + _SOLO[k:]
@@ -686,7 +665,7 @@ T = {
  "s_bye": "الوداع", "s_service": "حذف رسائل الانضمام",
  "set_info": "⚙️ إعدادات المجموعة\n\n⚠️ الحد الأقصى للتحذيرات: {mw}\n🚨 السبام: {fn} رسائل خلال {fs} ثانية ← كتم {sm} دقيقة\n\nاللغة والخيارات من الأزرار، وللمزيد: /help",
  "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
- "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو، أو بكتابة @معرّفه، أو رقمه):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/clearwords — حذف كل الكلمات المحظورة (بعد تأكيد بزر)\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات (أو بأزرار ➖ ➕ داخل /settings)\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/periodic المدة — تشغيل الرسائل الدورية المفيدة (آلاف الرسائل: نصيحة وخطوة عملية ودعوة للمشاركة) وتُرسَل بالترتيب كل مدة تحددها، مثل /periodic 2h. وعند انتهائها تبدأ من الأولى. و/periodic off لإيقافها، و/periodic وحدها لعرض الحالة\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setcaptcha دقائق — مدة التحقق (زر «أنا لست روبوت») للأعضاء الجدد، وتُفعَّل وتُعطَّل من /settings\n/addreply كلمة | الرد — رد تلقائي (سطر لكل رد، ويمكن استخدام {name})، مثال: /addreply السلام عليكم | وعليكم السلام ورحمة الله\n/delreply كلمة — حذف رد، و/replies لعرض الردود\n/setstreak أيام — عدد الأيام المتتالية لجائزة الوسم (الافتراضي 4)، و/settz ساعات — فرق توقيتك عن UTC (الافتراضي 3)\nملاحظة: الأعضاء العاديون يعمل لهم الأمر /rules فقط\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\n/setchatlink رابط — رابط مجموعة الدردشة الذي يُضاف لرسائل التشجيع على منشورات القناة (تُفعَّل وتُعطَّل من /settings)\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
+ "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو، أو بكتابة @معرّفه، أو رقمه):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/clearwords — حذف كل الكلمات المحظورة (بعد تأكيد بزر)\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات (أو بأزرار ➖ ➕ داخل /settings)\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/periodic المدة — تشغيل الرسائل الدورية المفيدة (آلاف الرسائل: نصيحة وخطوة عملية ودعوة للمشاركة) وتُرسَل بالترتيب كل مدة تحددها، مثل /periodic 2h. وعند انتهائها تبدأ من الأولى. و/periodic off لإيقافها، و/periodic وحدها لعرض الحالة\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setcaptcha دقائق — مدة التحقق (زر «أنا لست روبوت») للأعضاء الجدد، وتُفعَّل وتُعطَّل من /settings\n/addreply كلمة | الرد — رد تلقائي (سطر لكل رد، ويمكن استخدام {name})، مثال: /addreply السلام عليكم | وعليكم السلام ورحمة الله\n/delreply كلمة — حذف رد، و/replies لعرض الردود\n/setstreak أيام — عدد الأيام المتتالية لجائزة الوسم (الافتراضي 4)، و/settz ساعات — فرق توقيتك عن UTC (الافتراضي 3)\nملاحظة: الأعضاء العاديون يعمل لهم الأمر /rules فقط\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\nرسائل التشجيع على منشورات القناة تُفعَّل وتُعطَّل من /settings\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
 },
 "en": {
  "units": ("min", "h", "d"),
@@ -751,7 +730,7 @@ T = {
  "s_bye": "Goodbye", "s_service": "Delete join/leave notices",
  "set_info": "⚙️ Group settings\n\n⚠️ Max warnings: {mw}\n🚨 Spam: {fn} messages in {fs} s → mute {sm} min\n\nUse the buttons for language and options. More: /help",
  "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nSend me a photo here to get its file_id.",
- "help": "🛡 Admin commands (reply to the member's message, or write their @username or numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/clearwords — delete ALL banned words (asks for confirmation)\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings (or with the ➖ ➕ buttons in /settings)\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/periodic time — turn on the useful recurring messages (thousands: a tip, a practical step and an invitation to join in), sent in order every period you choose, e.g. /periodic 2h. When they run out it starts again from the first. /periodic off to stop, /periodic alone shows the status\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setcaptcha minutes — time limit of the 'I am not a robot' check for new members (toggle in /settings)\n/addreply trigger | reply — auto reply (one per line, {name} allowed), e.g. /addreply hello | Hi there!\n/delreply trigger — remove one, /replies — list them\n/setstreak days — consecutive days for the tag prize (default 4), /settz hours — your offset from UTC (default 3)\nNote: regular members can only use /rules\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\n/setchatlink link — chat group link added to the cheer replies on channel posts (toggle in /settings)\nReset welcome text: /setwelcome default",
+ "help": "🛡 Admin commands (reply to the member's message, or write their @username or numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/clearwords — delete ALL banned words (asks for confirmation)\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings (or with the ➖ ➕ buttons in /settings)\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/periodic time — turn on the useful recurring messages (thousands: a tip, a practical step and an invitation to join in), sent in order every period you choose, e.g. /periodic 2h. When they run out it starts again from the first. /periodic off to stop, /periodic alone shows the status\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setcaptcha minutes — time limit of the 'I am not a robot' check for new members (toggle in /settings)\n/addreply trigger | reply — auto reply (one per line, {name} allowed), e.g. /addreply hello | Hi there!\n/delreply trigger — remove one, /replies — list them\n/setstreak days — consecutive days for the tag prize (default 4), /settz hours — your offset from UTC (default 3)\nNote: regular members can only use /rules\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\nCheer replies on channel posts can be toggled in /settings\nReset welcome text: /setwelcome default",
 },
 "fr": {
  "units": ("min", "h", "j"),
@@ -935,6 +914,11 @@ def load():
             for _c in data["chats"].values():
                 _c["ttl"] = 0
             data["v"] = 2
+            touch()
+        if data.get("v", 0) < 3:  # قائمة تشجيع جديدة: نبدأ من أول رسالة
+            for _c in data["chats"].values():
+                _c["cheer_i"] = 0
+            data["v"] = 3
             touch()
         loaded = True
         log.info("data loaded")
@@ -1559,9 +1543,6 @@ async def cheer_post(msg, chat):
     c["cheer_i"] = (i + 1) % len(CHEERS)  # بعد آخر رسالة نعود للأولى
     touch()
     text = CHEERS[i]
-    link = c["chat_link"] or (f"https://t.me/{chat.username}" if getattr(chat, "username", None) else "")
-    if link:
-        text += "\n" + link
     try:
         await msg.reply_text(text, link_preview_options=LinkPreviewOptions(is_disabled=True))
     except Exception as e:
@@ -2093,21 +2074,6 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         if bad:
             txt += "\n" + tr(cid, "words_bad", n=bad)
         return await reply(txt)
-    if cmd == "setchatlink":
-        link = body.strip()
-        if link.lower() == "off":
-            c["chat_link"] = ""
-            touch()
-            return await reply(tr(cid, "link_off"))
-        if link.startswith("@"):
-            link = "https://t.me/" + link[1:]
-        elif link.startswith(("t.me/", "www.")):
-            link = "https://" + link
-        if not re.fullmatch(r"https?://\S+", link):
-            return await usage("/setchatlink https://t.me/xxx  |  /setchatlink off")
-        c["chat_link"] = link
-        touch()
-        return await reply(tr(cid, "link_set"))
     if cmd in ("setwelcome", "setbye"):
         key = "welcome_text" if cmd == "setwelcome" else "bye_text"
         if not body:
@@ -2266,7 +2232,7 @@ app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn"
                                 "reset", "warns", "del"], mod, G))
 app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
                                 "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules", "setwordmute", "setautodel",
-                                "periodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setchatlink", "setcaptcha", "clearwords", "addreply", "delreply", "replies", "setstreak", "settz"],
+                                "periodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setcaptcha", "clearwords", "addreply", "delreply", "replies", "setstreak", "settz"],
                                conf, G))
 app.add_handler(MessageHandler(G & filters.Document.ALL & filters.CaptionRegex(r"^/addword(@\w+)?(\s|$)"), addword_file))
 app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg|cv|pz|wn|cwy|cwn|noop):"))
