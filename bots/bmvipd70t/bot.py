@@ -1,4 +1,4 @@
-import os, re, json, time, html, base64, asyncio, logging
+import os, re, json, time, html, base64, asyncio, logging, random
 import urllib.request, urllib.error
 from collections import defaultdict, deque
 from copy import deepcopy
@@ -11,6 +11,15 @@ from telegram.ext import (Application, CommandHandler, MessageHandler,
                           CallbackQueryHandler, ChatMemberHandler, ContextTypes, filters)
 
 TOKEN = os.environ["BOT_TOKEN"]
+API_ID = os.environ.get("API_ID")      # من my.telegram.org (لحظر أي يوزر)
+API_HASH = os.environ.get("API_HASH")
+try:
+    from telethon import TelegramClient
+    from telethon.sessions import StringSession
+    from telethon.tl.types import User as TLUser
+except ImportError:
+    TelegramClient = None
+TL = None
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("guard")
 
@@ -32,10 +41,12 @@ DEFAULTS = {
     "welcome_media": None, "bye_media": None,
     "banned": {},   # كلمة -> مدة الكتم بالدقائق (0 = حذف وتحذير فقط)
     "allow": [],    # نطاقات روابط مسموحة
+    "captcha": False, "captcha_time": 120,        # التحقق بزر عند الانضمام
+    "warn_action": "ban", "warn_dur": 1440,       # الإجراء عند بلوغ الحد الأقصى للتحذيرات
 }
 CREDIT = "🤖 Bot by @Incert_us"   # حقوق البوت
 LANGS = {"ar": "🇸🇦 العربية", "en": "🇬🇧 English", "fr": "🇫🇷 Français", "tr": "🇹🇷 Türkçe"}
-TOG = ["links", "promo", "spam", "words", "leaveban", "welcome", "bye", "service", "cheer"]
+TOG = ["links", "promo", "spam", "words", "leaveban", "welcome", "bye", "service", "cheer", "captcha"]
 
 # =====================================================================
 #  رسائل التشجيع على منشورات القناة (تُرسَل بالترتيب، وعند انتهائها تبدأ من الأولى)
@@ -140,7 +151,7 @@ T = {
  "left_note": "🚫 تم حظره تلقائيًا لمغادرته. يمكن للمشرفين إلغاء الحظر بالزر أو بالأمر /unban",
  "welcome": "أهلًا بك {name} في {group} 🌹\nالتزم بقوانين المجموعة.",
  "bye": "وداعًا {name} 👋",
- "need_target": "رد على رسالة العضو، أو اكتب معرّفه الرقمي بعد الأمر.",
+ "need_target": "رد على رسالة العضو، أو اكتب @اليوزر أو معرّفه الرقمي بعد الأمر.",
  "is_admin": "لا يمكن تنفيذ هذا الأمر على مشرف.",
  "ok": "✅ تم.",
  "fail": "❌ تعذر التنفيذ. تأكد أن البوت مشرف بصلاحيات الحذف والحظر وتقييد الأعضاء.\n{err}",
@@ -166,8 +177,17 @@ T = {
  "s_words": "الكلمات المحظورة", "s_leaveban": "حظر من يغادر", "s_welcome": "الترحيب",
  "s_bye": "الوداع", "s_service": "حذف رسائل الانضمام",
  "set_info": "⚙️ إعدادات المجموعة\n\n⚠️ الحد الأقصى للتحذيرات: {mw}\n🚨 السبام: {fn} رسائل خلال {fs} ثانية ← كتم {sm} دقيقة\n\nاللغة والخيارات من الأزرار، وللمزيد: /help",
+ "s_captcha": "التحقق (Captcha)",
+ "cap_q": "🛡 أهلًا {user}!\nللتأكد أنك لست روبوتًا اضغط على: {emoji}\n⏳ لديك {sec} ثانية وإلا ستُطرد.",
+ "cap_ok": "✅ تم التحقق، أهلًا بك!", "cap_wrong": "❌ إجابة خاطئة، حاول مرة أخرى.",
+ "cap_fail": "❌ فشل التحقق وتم طردك.", "cap_not_you": "هذا الزر ليس لك.",
+ "cap_set": "✅ تم تفعيل التحقق، المهلة {sec} ثانية.", "cap_off": "✅ تم إيقاف التحقق.",
+ "words_cleared": "🗑 تم حذف جميع الكلمات المحظورة ({n}).",
+ "warns_set": "✅ الحد الأقصى للتحذيرات: {n} — الإجراء عند بلوغه: {act}",
+ "kickedr": "👢 تم طرد {user}.\n📌 السبب: {reason}",
+ "user_none": "❌ لم أجد مستخدمًا بهذا اليوزر. تأكد من كتابته، أو ردّ على رسالته، أو استخدم معرّفه الرقمي.",
  "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
- "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة معرّفه الرقمي):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/setperiodic المدة نص — رسالة تتكرر كل فترة (مثل 2h)، أو بالرد على صورة/رسالة. و/setperiodic off لإيقافها\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\n/setchatlink رابط — رابط مجموعة الدردشة الذي يُضاف لرسائل التشجيع على منشورات القناة (تُفعَّل وتُعطَّل من /settings)\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
+ "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو أو بكتابة @اليوزر أو معرّفه الرقمي، مثل: /ban @username سبب):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/clearwords — حذف كل الكلمات المحظورة\n/setcaptcha ثواني — تفعيل التحقق بزر عند الانضمام (off للإيقاف)\n/setwarnaction ban|kick|mute [مدة] — الإجراء عند بلوغ حد التحذيرات (والحد من /setwarns أو لوحة /settings)\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/setperiodic المدة نص — رسالة تتكرر كل فترة (مثل 2h)، أو بالرد على صورة/رسالة. و/setperiodic off لإيقافها\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\n/setchatlink رابط — رابط مجموعة الدردشة الذي يُضاف لرسائل التشجيع على منشورات القناة (تُفعَّل وتُعطَّل من /settings)\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
 },
 "en": {
  "units": ("min", "h", "d"),
@@ -189,7 +209,7 @@ T = {
  "left_note": "🚫 Automatically banned for leaving. Admins can unban with the button or /unban",
  "welcome": "Welcome {name} to {group} 🌹\nPlease follow the group rules.",
  "bye": "Goodbye {name} 👋",
- "need_target": "Reply to the member's message, or write their numeric ID after the command.",
+ "need_target": "Reply to the member's message, or write their @username or numeric ID after the command.",
  "is_admin": "This command cannot be used on an admin.",
  "ok": "✅ Done.",
  "fail": "❌ Failed. Make sure the bot is an admin with delete, ban and restrict permissions.\n{err}",
@@ -215,8 +235,17 @@ T = {
  "s_words": "Banned words", "s_leaveban": "Ban who leaves", "s_welcome": "Welcome",
  "s_bye": "Goodbye", "s_service": "Delete join/leave notices",
  "set_info": "⚙️ Group settings\n\n⚠️ Max warnings: {mw}\n🚨 Spam: {fn} messages in {fs} s → mute {sm} min\n\nUse the buttons for language and options. More: /help",
+ "s_captcha": "Captcha",
+ "cap_q": "🛡 Welcome {user}!\nTo prove you are not a robot press: {emoji}\n⏳ You have {sec} seconds or you will be kicked.",
+ "cap_ok": "✅ Verified, welcome!", "cap_wrong": "❌ Wrong answer, try again.",
+ "cap_fail": "❌ Verification failed, you were kicked.", "cap_not_you": "This button is not for you.",
+ "cap_set": "✅ Captcha enabled, timeout {sec} s.", "cap_off": "✅ Captcha disabled.",
+ "words_cleared": "🗑 All banned words were deleted ({n}).",
+ "warns_set": "✅ Max warnings: {n} — action when reached: {act}",
+ "kickedr": "👢 {user} has been kicked.\n📌 Reason: {reason}",
+ "user_none": "❌ I could not find a user with that username. Check it, reply to their message, or use their numeric ID.",
  "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nSend me a photo here to get its file_id.",
- "help": "🛡 Admin commands (reply to the member's message or write their numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/setperiodic time text — a message repeated every period (e.g. 2h), or reply to a photo/message. /setperiodic off to stop it\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\n/setchatlink link — chat group link added to the cheer replies on channel posts (toggle in /settings)\nReset welcome text: /setwelcome default",
+ "help": "🛡 Admin commands (reply to the member's message or write their @username or numeric ID, e.g. /ban @username reason):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/clearwords — delete all banned words\n/setcaptcha seconds — enable join captcha button (off to disable)\n/setwarnaction ban|kick|mute [time] — action at max warnings (limit via /setwarns or /settings)\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/setperiodic time text — a message repeated every period (e.g. 2h), or reply to a photo/message. /setperiodic off to stop it\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\n/setchatlink link — chat group link added to the cheer replies on channel posts (toggle in /settings)\nReset welcome text: /setwelcome default",
 },
 "fr": {
  "units": ("min", "h", "j"),
@@ -335,7 +364,7 @@ def tr(cid, key, **kw):
 REPO = os.environ.get("GITHUB_REPOSITORY")
 GH = os.environ.get("GITHUB_TOKEN")
 DATA_PATH = f"data/{TOKEN.split(':')[0]}.json"
-data = {"chats": {}, "warns": {}}
+data = {"chats": {}, "warns": {}, "unames": {}}
 sha = None
 loaded = False
 dirty = False
@@ -371,6 +400,7 @@ def load():
             data = json.load(open("data.json", encoding="utf-8"))
         data.setdefault("chats", {})
         data.setdefault("warns", {})
+        data.setdefault("unames", {})
         if data.get("v", 0) < 2:  # ترحيل: إيقاف الحذف التلقائي للردود في المجموعات القديمة
             for _c in data["chats"].values():
                 _c["ttl"] = 0
@@ -561,9 +591,22 @@ async def punish(ctx, cid, uid, name, reason, mute_min=0):
     ment = mention_id(uid, name)
     if n >= mx:
         set_warns(cid, uid, 0)
-        await ctx.bot.ban_chat_member(cid, uid)
-        text = tr(cid, "banned", user=ment, reason=tr(cid, "r_max", max=mx) + " — " + reason)
-        rows = [[btn(cid, "b_unban", f"ub:{uid}")]]
+        act = c.get("warn_action", "ban")
+        full = tr(cid, "r_max", max=mx) + " — " + reason
+        if act == "kick":
+            await ctx.bot.ban_chat_member(cid, uid)
+            await ctx.bot.unban_chat_member(cid, uid, only_if_banned=True)
+            text = tr(cid, "kickedr", user=ment, reason=full)
+            rows = []
+        elif act == "mute":
+            dur = c.get("warn_dur", 1440)
+            await do_mute(ctx, cid, uid, dur)
+            text = tr(cid, "mutedu", user=ment, dur=fmt_dur(cid, dur), reason=full)
+            rows = [[btn(cid, "b_unmute", f"um:{uid}")]]
+        else:
+            await ctx.bot.ban_chat_member(cid, uid)
+            text = tr(cid, "banned", user=ment, reason=full)
+            rows = [[btn(cid, "b_unban", f"ub:{uid}")]]
     else:
         set_warns(cid, uid, n)
         text = tr(cid, "warn", user=ment, reason=reason, n=n, max=mx)
@@ -573,7 +616,7 @@ async def punish(ctx, cid, uid, name, reason, mute_min=0):
             text += "\n" + tr(cid, "muted", dur=fmt_dur(cid, mute_min))
             rows.append([btn(cid, "b_unmute", f"um:{uid}")])
         rows.append([btn(cid, "b_reset", f"rw:{uid}")])
-    await ctx.bot.send_message(cid, text, parse_mode="HTML", reply_markup=InlineKeyboardMarkup(rows))
+    await ctx.bot.send_message(cid, text, parse_mode="HTML", reply_markup=InlineKeyboardMarkup(rows) if rows else None)
 
 
 # =====================================================================
@@ -641,6 +684,7 @@ async def guard(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         return await cheer_post(msg, chat)
     if not msg or not user or msg.sender_chat or user.is_bot:
         return
+    remember(user)
     c = cfg(chat.id)
     text = msg.text or msg.caption or ""
     nt = norm(text)
@@ -712,6 +756,14 @@ async def do_join(ctx, chat, u):
     c = cfg(chat.id)
     if u.is_bot or not fresh(chat.id, u.id, "join"):
         return
+    remember(u)
+    if c["captcha"] and await start_captcha(ctx, chat, u):
+        return
+    await welcome_user(ctx, chat, u)
+
+
+async def welcome_user(ctx, chat, u):
+    c = cfg(chat.id)
     dm_ok = False
     if c["rules"]:  # القوانين في الخاص (تنجح فقط إن سبق للعضو أن بدأ محادثة مع البوت)
         try:
@@ -730,9 +782,91 @@ async def do_join(ctx, chat, u):
                      InlineKeyboardMarkup(rows) if rows else None)
 
 
+
+# ---------------- التحقق (Captcha) ----------------
+CAP_EMOJI = ["🍎", "🐶", "🚗", "⚽", "🌙", "🔑", "🎁", "🐱", "🍕", "🌸", "⭐", "🎈"]
+cap_pending = {}
+
+
+async def captcha_timeout(bot, cid, uid, secs):
+    await asyncio.sleep(secs)
+    p = cap_pending.pop((cid, uid), None)
+    if not p:
+        return
+    try:
+        await bot.delete_message(cid, p["mid"])
+    except Exception:
+        pass
+    try:
+        await bot.ban_chat_member(cid, uid)
+        await bot.unban_chat_member(cid, uid, only_if_banned=True)
+    except Exception as e:
+        log.warning("captcha kick failed: %s", e)
+
+
+async def start_captcha(ctx, chat, u):
+    cid, secs = chat.id, cfg(chat.id)["captcha_time"]
+    try:
+        until = datetime.now(timezone.utc) + timedelta(seconds=secs + 90)
+        await ctx.bot.restrict_chat_member(cid, u.id, no_perms(), until_date=until)
+        opts = random.sample(CAP_EMOJI, 4)
+        ans = random.choice(opts)
+        kb = InlineKeyboardMarkup([[InlineKeyboardButton(e, callback_data=f"cp:{u.id}:{e}") for e in opts]])
+        msg = await ctx.bot.send_message(cid, tr(cid, "cap_q", user=mention(u), emoji=ans, sec=secs),
+                                         parse_mode="HTML", reply_markup=kb)
+    except Exception as e:
+        log.warning("captcha start failed: %s", e)
+        return False
+    task = asyncio.create_task(captcha_timeout(ctx.bot, cid, u.id, secs))
+    cap_pending[(cid, u.id)] = {"mid": msg.message_id, "ans": ans, "task": task, "tries": 0}
+    return True
+
+
+async def captcha_press(q, ctx):
+    _, uid_s, emoji = q.data.split(":", 2)
+    uid, chat = int(uid_s), q.message.chat
+    cid = chat.id
+    if q.from_user.id != uid:
+        return await q.answer(tr(cid, "cap_not_you"), show_alert=True)
+    p = cap_pending.get((cid, uid))
+    if not p:
+        await try_delete(q.message)
+        return await q.answer()
+    if emoji == p["ans"]:
+        cap_pending.pop((cid, uid), None)
+        p["task"].cancel()
+        try:
+            await do_unmute(ctx, cid, uid)
+        except Exception as e:
+            log.warning("captcha unmute failed: %s", e)
+        await try_delete(q.message)
+        await q.answer(tr(cid, "cap_ok"))
+        return await welcome_user(ctx, chat, q.from_user)
+    p["tries"] += 1
+    if p["tries"] >= 2:
+        cap_pending.pop((cid, uid), None)
+        p["task"].cancel()
+        await try_delete(q.message)
+        try:
+            await ctx.bot.ban_chat_member(cid, uid)
+            await ctx.bot.unban_chat_member(cid, uid, only_if_banned=True)
+        except Exception as e:
+            log.warning("captcha kick failed: %s", e)
+        return await q.answer(tr(cid, "cap_fail"), show_alert=True)
+    await q.answer(tr(cid, "cap_wrong"), show_alert=True)
+
+
 async def do_leave(ctx, chat, u):
     c, cid = cfg(chat.id), chat.id
     if u.is_bot or not fresh(cid, u.id, "leave"):
+        return
+    p = cap_pending.pop((cid, u.id), None)
+    if p:  # غادر أثناء التحقق: لا حظر ولا وداع
+        p["task"].cancel()
+        try:
+            await ctx.bot.delete_message(cid, p["mid"])
+        except Exception:
+            pass
         return
     if c["leaveban"]:  # حظر صامت: لا تظهر أي رسالة عن الحظر
         try:
@@ -958,9 +1092,54 @@ async def periodic_loop(app):
 # =====================================================================
 #  أوامر الإشراف
 # =====================================================================
+def remember(u):
+    """يحفظ يوزر -> معرّف لكل من يتكلم أو ينضم (يُستخدم لحظر @يوزر بسرعة)."""
+    if u and getattr(u, "username", None):
+        k = u.username.lower()
+        names = data.setdefault("unames", {})
+        if names.get(k) != u.id and (k in names or len(names) < 50000):
+            names[k] = u.id
+            touch()
+
+
+async def find_user(ctx, uname):
+    """يحوّل @يوزر إلى (معرّف، اسم): 1) ذاكرة البوت 2) MTProto عبر Telethon (أي يوزر عام) 3) Bot API."""
+    uname = uname.lstrip("@").lower()
+    if not re.fullmatch(r"[a-z][a-z0-9_]{2,31}", uname):
+        return None
+    uid = data.get("unames", {}).get(uname)
+    if uid:
+        return uid, "@" + uname
+    if TL:
+        try:
+            ent = await asyncio.wait_for(TL.get_entity("@" + uname), 15)
+            if isinstance(ent, TLUser):
+                name = " ".join(x for x in (ent.first_name, ent.last_name) if x) or "@" + uname
+                data.setdefault("unames", {})[uname] = ent.id
+                touch()
+                return ent.id, name
+        except Exception as e:
+            log.info("telethon resolve failed for %s: %s", uname, e)
+    try:
+        ch = await ctx.bot.get_chat("@" + uname)
+        if ch.type == "private":
+            return ch.id, ch.full_name or "@" + uname
+    except Exception:
+        pass
+    return None
+
+
 async def resolve(update, ctx, reply):
     m, cid = update.effective_message, update.effective_chat.id
     args = list(ctx.args)
+    if not (m.reply_to_message and m.reply_to_message.from_user) and args and \
+            (args[0].startswith("@") or "t.me/" in args[0]):
+        uname = args[0].rstrip("/").split("/")[-1].lstrip("@")
+        f = await find_user(ctx, uname)
+        if not f:
+            await reply(tr(cid, "user_none"))
+            return None
+        return f[0], f[1], args[1:]
     if m.reply_to_message and m.reply_to_message.from_user:
         u = m.reply_to_message.from_user
         return u.id, u.full_name, args
@@ -1048,6 +1227,9 @@ def panel(cid):
              for k, n in items[i:i + 2]] for i in range(0, len(items), 2)]
     tg = [InlineKeyboardButton(("✅ " if c[k] else "❌ ") + tr(cid, "s_" + k), callback_data="tg:" + k) for k in TOG]
     rows += [tg[i:i + 2] for i in range(0, len(tg), 2)]
+    rows.append([InlineKeyboardButton("➖", callback_data="mw:-"),
+                 InlineKeyboardButton(f"⚠️ {c['max_warns']}", callback_data="mw:0"),
+                 InlineKeyboardButton("➕", callback_data="mw:+")])
     return text, InlineKeyboardMarkup(rows)
 
 
@@ -1091,6 +1273,31 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             return await reply(tr(cid, "w_none"))
         touch()
         return await reply(tr(cid, "w_del", w="، ".join(gone)))
+    if cmd == "clearwords":
+        n = len(c["banned"])
+        if not n:
+            return await reply(tr(cid, "no_words"))
+        c["banned"].clear()
+        touch()
+        return await reply(tr(cid, "words_cleared", n=n))
+    if cmd == "setcaptcha":
+        if a and a[0].lower() == "off":
+            c["captcha"] = False
+            touch()
+            return await reply(tr(cid, "cap_off"))
+        if not (a and a[0].isdigit() and 15 <= int(a[0]) <= 900):
+            return await usage("/setcaptcha 120  |  /setcaptcha off")
+        c["captcha"], c["captcha_time"] = True, int(a[0])
+        touch()
+        return await reply(tr(cid, "cap_set", sec=int(a[0])))
+    if cmd == "setwarnaction":
+        if not (a and a[0].lower() in ("ban", "kick", "mute")):
+            return await usage("/setwarnaction ban  |  kick  |  mute 1d")
+        c["warn_action"] = a[0].lower()
+        if c["warn_action"] == "mute" and len(a) > 1 and parse_dur(a[1]):
+            c["warn_dur"] = parse_dur(a[1])
+        touch()
+        return await reply(tr(cid, "warns_set", n=c["max_warns"], act=c["warn_action"]))
     if cmd == "setwordmute":
         d = parse_dur(a[0]) if a else None
         if d is None:
@@ -1215,11 +1422,11 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         touch()
         return await reply(tr(cid, "media_set"))
     if cmd == "setwarns":
-        if not (a and a[0].isdigit() and 1 <= int(a[0]) <= 20):
-            return await usage("/setwarns 3")
+        if not (a and a[0].isdigit() and 1 <= int(a[0]) <= 50):
+            return await usage("/setwarns 3  (1-50)")
         c["max_warns"] = int(a[0])
         touch()
-        return await reply(tr(cid, "ok"))
+        return await reply(tr(cid, "warns_set", n=c["max_warns"], act=c.get("warn_action", "ban")))
     if cmd == "setspam":
         if len(a) != 3 or not all(x.isdigit() for x in a) or int(a[0]) < 3 or int(a[1]) < 1:
             return await usage("/setspam 6 8 10")
@@ -1233,12 +1440,16 @@ async def buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if not q.message:
         return await q.answer()
     cid = q.message.chat.id
+    if q.data.startswith("cp:"):
+        return await captcha_press(q, ctx)
     if not await is_admin(ctx, cid, q.from_user.id):
         return await q.answer(tr(cid, "adm_only"), show_alert=True)
     act, _, arg = q.data.partition(":")
     try:
-        if act in ("tg", "lg"):
+        if act in ("tg", "lg", "mw"):
             c = cfg(cid)
+            if act == "mw" and arg in ("+", "-"):
+                c["max_warns"] = max(1, min(50, c["max_warns"] + (1 if arg == "+" else -1)))
             if act == "tg" and arg in TOG:
                 c[arg] = not c[arg]
             if act == "lg" and arg in LANGS:
@@ -1302,7 +1513,22 @@ async def on_error(update, ctx: ContextTypes.DEFAULT_TYPE):
     log.warning("error: %s", ctx.error)
 
 
+async def start_tl():
+    global TL
+    if not (TelegramClient and API_ID and API_HASH):
+        log.warning("Telethon/API_ID/API_HASH missing: @username lookup limited to users the bot has seen")
+        return
+    try:
+        cl = TelegramClient(StringSession(), int(API_ID), API_HASH)
+        await cl.start(bot_token=TOKEN)
+        TL = cl
+        log.info("telethon ready")
+    except Exception as e:
+        log.error("telethon start failed: %s", e)
+
+
 async def post_init(app):
+    await start_tl()
     for _ in range(5):
         await asyncio.to_thread(load)
         if loaded:
@@ -1313,6 +1539,11 @@ async def post_init(app):
 
 
 async def post_shutdown(app):
+    if TL:
+        try:
+            await TL.disconnect()
+        except Exception:
+            pass
     if loaded:
         await asyncio.to_thread(save, json.dumps(data, ensure_ascii=False, indent=1))
 
@@ -1328,10 +1559,11 @@ app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn"
                                 "reset", "warns", "del"], mod, G))
 app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
                                 "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules", "setwordmute", "setautodel",
-                                "setperiodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setchatlink"],
+                                "setperiodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setchatlink",
+                                "clearwords", "setcaptcha", "setwarnaction"],
                                conf, G))
 app.add_handler(MessageHandler(G & filters.Document.ALL & filters.CaptionRegex(r"^/addword(@\w+)?(\s|$)"), addword_file))
-app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg):"))
+app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg|mw|cp):"))
 app.add_handler(MessageHandler(filters.ChatType.PRIVATE & (filters.PHOTO | filters.ANIMATION | filters.VIDEO |
                                                            filters.Sticker.ALL), get_id))
 app.add_handler(MessageHandler(G & ~filters.COMMAND & ~filters.StatusUpdate.ALL, guard), group=1)
