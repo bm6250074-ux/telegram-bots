@@ -34,7 +34,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1003920369160": {
    "lang": "ar",
@@ -73,7 +77,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1004294939299": {
    "lang": "ar",
@@ -112,7 +120,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1004347779307": {
    "lang": "ar",
@@ -150,7 +162,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1003831778186": {
    "lang": "ar",
@@ -189,7 +205,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1003851080521": {
    "lang": "ar",
@@ -527,7 +547,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1004402511210": {
    "lang": "ar",
@@ -563,7 +587,11 @@
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   },
   "-1003573588732": {
    "lang": "ar",
@@ -857,11 +885,15 @@
     "طيز": 100
    },
    "allow": [],
-   "captcha": false,
+   "captcha": true,
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
-   "captcha_min": 5
+   "captcha_min": 5,
+   "rewards": true,
+   "streak_days": 4,
+   "tz": 3,
+   "replies": {}
   }
  },
  "warns": {
@@ -881,5 +913,7 @@
    8723694584,
    "ʳᵒᵒᵗ『𝐃𝐀𝐑𝐊』 ᶻ 𝗓 𐰁!"
   ]
- }
+ },
+ "prizes": {},
+ "streak": {}
 }
