@@ -29,7 +29,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1003920369160": {
    "lang": "ar",
@@ -63,7 +67,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1004294939299": {
    "lang": "ar",
@@ -97,7 +105,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1004347779307": {
    "lang": "ar",
@@ -130,7 +142,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1003831778186": {
    "lang": "ar",
@@ -164,7 +180,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1003851080521": {
    "lang": "ar",
@@ -497,7 +517,11 @@
    ],
    "cheer": true,
    "cheer_i": 3,
-   "chat_link": "https://t.me/Incertus_Discuss"
+   "chat_link": "https://t.me/Incertus_Discuss",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1004402511210": {
    "lang": "ar",
@@ -528,7 +552,11 @@
    "periodic_btns": [],
    "cheer": true,
    "cheer_i": 0,
-   "chat_link": ""
+   "chat_link": "",
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   },
   "-1003573588732": {
    "lang": "ar",
@@ -822,12 +850,18 @@
     "طيزك": 100,
     "طيز": 100
    },
-   "allow": []
+   "allow": [],
+   "captcha": false,
+   "captcha_time": 120,
+   "warn_action": "ban",
+   "warn_dur": 1440
   }
  },
  "warns": {
   "-1003851080521:8939960590": 4,
-  "-1003573588732:8390019729": 2
+  "-1003573588732:8390019729": 2,
+  "-1003573588732:8939960590": 1
  },
- "v": 2
+ "v": 2,
+ "unames": {}
 }
