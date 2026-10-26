@@ -885,7 +885,7 @@
     "طيز": 100
    },
    "allow": [],
-   "captcha": true,
+   "captcha": false,
    "captcha_time": 120,
    "warn_action": "ban",
    "warn_dur": 1440,
