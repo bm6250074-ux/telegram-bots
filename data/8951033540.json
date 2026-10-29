@@ -615,9 +615,9 @@
    "ttl": 0,
    "periodic": {
     "every": 300,
-    "last": 1793282208.176267,
-    "mid": 905,
-    "i": 12
+    "last": 1793300225.8566942,
+    "mid": 912,
+    "i": 13
    },
    "welcome_btns": [
     [
@@ -641,7 +641,7 @@
     ]
    ],
    "cheer": true,
-   "cheer_i": 5,
+   "cheer_i": 6,
    "chat_link": "https://t.me/Incertus_Discuss",
    "welcome_media": [
     "photo",
