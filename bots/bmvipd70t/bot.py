@@ -28,7 +28,7 @@ DEFAULTS = {
     "ttl": 0,           # حذف ردود البوت تلقائيًا بعد (ثانية)، 0 = لا تُحذف (يُفعَّل بـ /setautodel)
     "periodic": None,   # الرسالة الدورية
     "welcome_btns": [], "bye_btns": [], "periodic_btns": [],   # أزرار الروابط
-    "rewards": True, "streak_days": 4, "tz": 3, "replies": {},   # جوائز الوسوم + الردود التلقائية
+    "fwd": True, "rewards": True, "streak_days": 4, "tz": 3, "replies": {},   # جوائز الوسوم + الردود التلقائية
     "captcha": True, "captcha_min": 5,   # التحقق من الأعضاء الجدد بزر (المدة بالدقائق)
     "cheer": True, "cheer_i": 0, "chat_link": "",              # التشجيع على منشورات القناة
     "welcome_media": None, "bye_media": None,
@@ -37,7 +37,7 @@ DEFAULTS = {
 }
 CREDIT = "🤖 Bot by @Incert_us"   # حقوق البوت
 LANGS = {"ar": "🇸🇦 العربية", "en": "🇬🇧 English", "fr": "🇫🇷 Français", "tr": "🇹🇷 Türkçe"}
-TOG = ["links", "promo", "spam", "words", "leaveban", "welcome", "bye", "service", "cheer", "captcha", "rewards"]
+TOG = ["links", "promo", "spam", "words", "leaveban", "welcome", "bye", "service", "cheer", "captcha", "rewards", "fwd"]
 
 # =====================================================================
 #  رسائل التشجيع على منشورات القناة: خفيفة بلا رابط (تُرسَل بالترتيب، وعند انتهائها تبدأ من الأولى)
@@ -705,7 +705,7 @@ T = {
  "unmuted": "🔊 تم إلغاء الكتم عن {user} بواسطة {admin}.",
  "unbanned": "✅ تم إلغاء حظر {user} بواسطة {admin}.",
  "reset": "🧹 تم تصفير تحذيرات {user} بواسطة {admin}.",
- "r_link": "إرسال الروابط ممنوع", "r_promo": "الترويج ممنوع",
+ "r_link": "إرسال الروابط ممنوع", "r_promo": "الترويج ممنوع لأنه ليس له علاقة",
  "r_flood": "إرسال رسائل بسرعة (سبام)", "r_dup": "تكرار نفس الرسالة (سبام)",
  "r_mention": "كثرة الإشارات (إزعاج)", "r_word": "استخدام كلمة محظورة",
  "r_max": "تجاوز الحد الأقصى للتحذيرات ({max})", "r_admin": "قرار المشرف",
@@ -737,6 +737,11 @@ T = {
  "s_warns": "الإنذارات", "clear_ask": "⚠️ سيتم حذف {n} كلمة محظورة نهائيًا. هل أنت متأكد؟",
  "periodic_info": "ℹ️ الرسائل الدورية: {state}\n📚 عدد الرسائل المتاحة: {n}\n🔢 الرسالة التالية رقم: {i}\n\nللتفعيل: /periodic 2h — وللإيقاف: /periodic off",
  "adm_cmd": "⛔ هذا الأمر للمشرفين فقط.",
+ "r_fwd": "إعادة التوجيه من خارج القناة المربوطة غير مسموحة", "s_fwd": "منع التوجيه من خارج القناة المربوطة",
+ "w_ban": "حظر مباشر", "words_ban": "⛔ كلمات الحظر المباشر:\n{list}",
+ "priv_none": "لا توجد مجموعات تديرها مع هذا البوت.\nأضف البوت إلى مجموعتك كمشرف أولًا، وتأكد أنك مشرف فيها.",
+ "priv_pick": "اختر المجموعة التي تريد ضبط إعداداتها من هنا:",
+ "priv_sel": "✅ تم اختيار المجموعة: {title}\nأرسل الآن أي أمر هنا، مثل /settings أو /addword، وسيُطبَّق عليها دون إزعاج الأعضاء.\n(و/groups لتغيير المجموعة)",
  "prize_msg": "🎉 مبروك {user}!\nلقد استمررت بالإرسال في المجموعة {days} أيام متتالية، ولذلك حصلت على جائزة: وسم (Tag) مخصص 🏅\n\nالوسم المقترح لك:\n«{tag}»\n\nهل يعجبك؟ اختر من الأزرار أدناه:",
  "b_prize_yes": "✅ أعجبني، ضعه لي", "b_prize_no": "❌ لا أريده", "prize_not_you": "هذا الزر للفائز بالجائزة فقط.",
  "prize_done": "✅ تم وضع الوسم «{tag}» لـ {user}. مبروك! 🎊",
@@ -757,8 +762,8 @@ T = {
  "s_words": "الكلمات المحظورة", "s_leaveban": "حظر من يغادر", "s_welcome": "الترحيب",
  "s_bye": "الوداع", "s_service": "حذف رسائل الانضمام",
  "set_info": "⚙️ إعدادات المجموعة\n\n⚠️ الحد الأقصى للتحذيرات: {mw}\n🚨 السبام: {fn} رسائل خلال {fs} ثانية ← كتم {sm} دقيقة\n\nاللغة والخيارات من الأزرار، وللمزيد: /help",
- "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
- "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو، أو بكتابة @معرّفه، أو رقمه):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/clearwords — حذف كل الكلمات المحظورة (بعد تأكيد بزر)\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات (أو بأزرار ➖ ➕ داخل /settings)\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/periodic المدة — تشغيل الرسائل الدورية المفيدة (آلاف الرسائل: نصيحة وخطوة عملية ودعوة للمشاركة) وتُرسَل بالترتيب كل مدة تحددها، مثل /periodic 2h. وعند انتهائها تبدأ من الأولى. و/periodic off لإيقافها، و/periodic وحدها لعرض الحالة\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setcaptcha دقائق — مدة التحقق (زر «أنا لست روبوت») للأعضاء الجدد، وتُفعَّل وتُعطَّل من /settings\n/addreply كلمة | الرد — رد تلقائي (سطر لكل رد، ويمكن استخدام {name})، مثال: /addreply السلام عليكم | وعليكم السلام ورحمة الله\n/delreply كلمة — حذف رد، و/replies لعرض الردود\n/setstreak أيام — عدد الأيام المتتالية لجائزة الوسم (الافتراضي 4)، و/settz ساعات — فرق توقيتك عن UTC (الافتراضي 3)\nملاحظة: الأعضاء العاديون يعمل لهم الأمر /rules فقط\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\nرسائل التشجيع على منشورات القناة تُفعَّل وتُعطَّل من /settings\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
+ "start": "أنا بوت حماية للمجموعات 🛡\nأضفني إلى مجموعتك كمشرف ثم اكتب /help هناك.\nوإن كنت مشرفًا فاكتب /groups هنا لضبط إعدادات مجموعتك من الخاص.\nأرسل لي صورة هنا لأعطيك file_id الخاص بها.",
+ "help": "🛡 أوامر المشرفين (بالرد على رسالة العضو، أو بكتابة @معرّفه، أو رقمه):\n/warn [سبب] — تحذير\n/unwarn — إزالة تحذير واحد\n/resetwarns — تصفير التحذيرات\n/warns — عرض التحذيرات\n/mute [المدة] [سبب] — كتم (مثل 30m أو 2h أو 1d، الافتراضي 60 دقيقة)\n/unmute — إلغاء الكتم\n/ban [سبب] — حظر\n/unban — إلغاء الحظر\n/kick — طرد\n/del — حذف الرسالة المردود عليها\n\n⚙️ الإعدادات:\n/settings — لوحة الإعدادات واللغة\n/addword — إضافة كلمات محظورة. كلمة واحدة: /addword كلمة 60m . وعدة كلمات دفعة واحدة، كل كلمة في سطر (أو مفصولة بفاصلة) وبجانبها مدة الكتم:\n/addword\nكلمة1 60m\nكلمة2 2h\nكلمة3 0\n(بدون مدة = المدة الافتراضية، و0 = حذف وتحذير بلا كتم، وكلمة ban = حظر مباشر لمن يكتبها، مثال: سب ban)\n/delword الكلمة — حذف كلمة\n/words — عرض الكلمات\n/clearwords — حذف كل الكلمات المحظورة (بعد تأكيد بزر)\n/allow نطاق — السماح بروابط نطاق (بدون نطاق: عرض القائمة)\n/disallow نطاق — منع النطاق\n/setrules نص — تعيين قوانين المجموعة (off لحذفها) ويراها الجميع بالأمر /rules\n/setwelcome نص — رسالة الترحيب (يمكن استخدام {name} {group} {rules})\n/setbye نص — رسالة الوداع\n/setwelcomemedia — بالرد على صورة/فيديو/GIF للترحيب\n/setbyemedia — للوداع (اكتب off لحذف الوسائط)\n/setwarns عدد — الحد الأقصى للتحذيرات (أو بأزرار ➖ ➕ داخل /settings)\n/setspam رسائل ثواني دقائق_الكتم — ضبط السبام\n/setwordmute المدة — مدة الكتم الافتراضية للكلمات\n/periodic المدة — تشغيل الرسائل الدورية المفيدة (آلاف الرسائل: نصيحة وخطوة عملية ودعوة للمشاركة) وتُرسَل بالترتيب كل مدة تحددها، مثل /periodic 2h. وعند انتهائها تبدأ من الأولى. و/periodic off لإيقافها، و/periodic وحدها لعرض الحالة\n/setautodel ثواني — حذف ردود البوت تلقائيًا (off للإيقاف)\n/setcaptcha دقائق — مدة التحقق (زر «أنا لست روبوت») للأعضاء الجدد، وتُفعَّل وتُعطَّل من /settings\n/addreply كلمة | الرد — رد تلقائي (سطر لكل رد، ويمكن استخدام {name})، مثال: /addreply السلام عليكم | وعليكم السلام ورحمة الله\n/delreply كلمة — حذف رد، و/replies لعرض الردود\n/setstreak أيام — عدد الأيام المتتالية لجائزة الوسم (الافتراضي 4)، و/settz ساعات — فرق توقيتك عن UTC (الافتراضي 3)\nملاحظة: الأعضاء العاديون يعمل لهم الأمر /rules فقط\n\n💬 إدارة من الخاص: افتح محادثة البوت واكتب /groups لاختيار المجموعة، ثم اكتب أي أمر هناك (مثل /settings أو /addword) وسيُطبَّق على المجموعة دون إزعاج الأعضاء. في الخاص لا يوجد «الرد على رسالة»، فاستخدم @المعرّف أو الرقم.\n/setwelcomebuttons — أزرار روابط تحت رسالة الترحيب: كل سطر صف، وكل زر بالشكل: نص | رابط (وللأكثر من زر في الصف افصل بـ &&). و off للحذف\n/setbyebuttons — أزرار الوداع\n/setperiodicbuttons — أزرار الرسالة الدورية\nرسائل التشجيع على منشورات القناة تُفعَّل وتُعطَّل من /settings\nلإعادة نص الترحيب للافتراضي: /setwelcome default",
 },
 "en": {
  "units": ("min", "h", "d"),
@@ -770,7 +775,7 @@ T = {
  "unmuted": "🔊 {user} was unmuted by {admin}.",
  "unbanned": "✅ {user} was unbanned by {admin}.",
  "reset": "🧹 Warnings of {user} were reset by {admin}.",
- "r_link": "Links are not allowed", "r_promo": "Promotion is not allowed",
+ "r_link": "Links are not allowed", "r_promo": "Promotion is not allowed because it is unrelated",
  "r_flood": "Sending messages too fast (spam)", "r_dup": "Repeating the same message (spam)",
  "r_mention": "Too many mentions (annoyance)", "r_word": "Using a banned word",
  "r_max": "Reached the maximum warnings ({max})", "r_admin": "Admin decision",
@@ -802,6 +807,11 @@ T = {
  "s_warns": "Warnings", "clear_ask": "⚠️ {n} banned words will be permanently deleted. Are you sure?",
  "periodic_info": "ℹ️ Recurring messages: {state}\n📚 Available messages: {n}\n🔢 Next message number: {i}\n\nTo enable: /periodic 2h — to stop: /periodic off",
  "adm_cmd": "⛔ This command is for admins only.",
+ "r_fwd": "Forwarding from outside the linked channel is not allowed", "s_fwd": "Block forwards from outside the linked channel",
+ "w_ban": "instant ban", "words_ban": "⛔ Instant-ban words:\n{list}",
+ "priv_none": "You do not manage any group with this bot.\nAdd the bot to your group as an admin first, and make sure you are an admin there.",
+ "priv_pick": "Choose the group you want to configure from here:",
+ "priv_sel": "✅ Group selected: {title}\nNow send any command here, such as /settings or /addword, and it will apply to it without bothering the members.\n(/groups to change the group)",
  "prize_msg": "🎉 Congratulations {user}!\nYou kept posting in the group for {days} days in a row, so you won a prize: a custom tag 🏅\n\nYour suggested tag:\n«{tag}»\n\nDo you like it? Choose below:",
  "b_prize_yes": "✅ I like it, set it", "b_prize_no": "❌ No thanks", "prize_not_you": "This button is only for the prize winner.",
  "prize_done": "✅ The tag «{tag}» was set for {user}. Congratulations! 🎊",
@@ -822,8 +832,8 @@ T = {
  "s_words": "Banned words", "s_leaveban": "Ban who leaves", "s_welcome": "Welcome",
  "s_bye": "Goodbye", "s_service": "Delete join/leave notices",
  "set_info": "⚙️ Group settings\n\n⚠️ Max warnings: {mw}\n🚨 Spam: {fn} messages in {fs} s → mute {sm} min\n\nUse the buttons for language and options. More: /help",
- "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nSend me a photo here to get its file_id.",
- "help": "🛡 Admin commands (reply to the member's message, or write their @username or numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only)\n/delword word — remove a word\n/words — list words\n/clearwords — delete ALL banned words (asks for confirmation)\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings (or with the ➖ ➕ buttons in /settings)\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/periodic time — turn on the useful recurring messages (thousands: a tip, a practical step and an invitation to join in), sent in order every period you choose, e.g. /periodic 2h. When they run out it starts again from the first. /periodic off to stop, /periodic alone shows the status\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setcaptcha minutes — time limit of the 'I am not a robot' check for new members (toggle in /settings)\n/addreply trigger | reply — auto reply (one per line, {name} allowed), e.g. /addreply hello | Hi there!\n/delreply trigger — remove one, /replies — list them\n/setstreak days — consecutive days for the tag prize (default 4), /settz hours — your offset from UTC (default 3)\nNote: regular members can only use /rules\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\nCheer replies on channel posts can be toggled in /settings\nReset welcome text: /setwelcome default",
+ "start": "I am a group protection bot 🛡\nAdd me to your group as an admin, then send /help there.\nIf you are an admin, send /groups here to configure your group from private chat.\nSend me a photo here to get its file_id.",
+ "help": "🛡 Admin commands (reply to the member's message, or write their @username or numeric ID):\n/warn [reason] — warn\n/unwarn — remove one warning\n/resetwarns — reset warnings\n/warns — show warnings\n/mute [time] [reason] — mute (e.g. 30m, 2h, 1d; default 60 min)\n/unmute — unmute\n/ban [reason] — ban\n/unban — unban\n/kick — kick\n/del — delete the replied message\n\n⚙️ Settings:\n/settings — settings panel and language\n/addword — add banned words. One word: /addword word 60m . Many words at once, one per line (or comma separated) with the mute time beside each:\n/addword\nword1 60m\nword2 2h\nword3 0\n(no time = default time, 0 = delete and warn only, ban = instant ban for anyone who writes it, e.g. word ban)\n/delword word — remove a word\n/words — list words\n/clearwords — delete ALL banned words (asks for confirmation)\n/allow domain — allow links of a domain (no argument: list)\n/disallow domain — block the domain again\n/setrules text — set the group rules (off to remove); everyone sees them with /rules\n/setwelcome text — welcome message ({name} {group} {rules} allowed)\n/setbye text — goodbye message\n/setwelcomemedia — reply to a photo/video/GIF\n/setbyemedia — same for goodbye (write off to remove)\n/setwarns number — max warnings (or with the ➖ ➕ buttons in /settings)\n/setspam messages seconds mute_minutes — spam settings\n/setwordmute time — default mute time for words\n/periodic time — turn on the useful recurring messages (thousands: a tip, a practical step and an invitation to join in), sent in order every period you choose, e.g. /periodic 2h. When they run out it starts again from the first. /periodic off to stop, /periodic alone shows the status\n/setautodel seconds — auto-delete bot replies (off to disable)\n/setcaptcha minutes — time limit of the 'I am not a robot' check for new members (toggle in /settings)\n/addreply trigger | reply — auto reply (one per line, {name} allowed), e.g. /addreply hello | Hi there!\n/delreply trigger — remove one, /replies — list them\n/setstreak days — consecutive days for the tag prize (default 4), /settz hours — your offset from UTC (default 3)\nNote: regular members can only use /rules\n\n💬 Managing from private chat: open the bot chat and send /groups to pick the group, then send any command there (e.g. /settings or /addword) and it applies to the group without bothering members. There is no 'reply to a message' in private, so use @username or the numeric ID.\n/setwelcomebuttons — link buttons under the welcome message: one row per line, each button as: text | link (several in a row separated by &&). off to remove\n/setbyebuttons — goodbye buttons\n/setperiodicbuttons — buttons for the recurring message\nCheer replies on channel posts can be toggled in /settings\nReset welcome text: /setwelcome default",
 },
 "fr": {
  "units": ("min", "h", "j"),
@@ -835,7 +845,7 @@ T = {
  "unmuted": "🔊 {user} a retrouvé la parole (par {admin}).",
  "unbanned": "✅ {user} a été débanni par {admin}.",
  "reset": "🧹 Avertissements de {user} remis à zéro par {admin}.",
- "r_link": "Les liens sont interdits", "r_promo": "La promotion est interdite",
+ "r_link": "Les liens sont interdits", "r_promo": "La promotion est interdite car elle n'a aucun rapport",
  "r_flood": "Messages trop rapides (spam)", "r_dup": "Même message répété (spam)",
  "r_mention": "Trop de mentions", "r_word": "Mot interdit utilisé",
  "r_max": "Maximum d'avertissements atteint ({max})", "r_admin": "Décision d'un admin",
@@ -889,7 +899,7 @@ T = {
  "unmuted": "🔊 {user} susturması {admin} tarafından kaldırıldı.",
  "unbanned": "✅ {user} yasağı {admin} tarafından kaldırıldı.",
  "reset": "🧹 {user} uyarıları {admin} tarafından sıfırlandı.",
- "r_link": "Bağlantı göndermek yasak", "r_promo": "Reklam yasak",
+ "r_link": "Bağlantı göndermek yasak", "r_promo": "Reklam yasak çünkü konuyla ilgisiz",
  "r_flood": "Çok hızlı mesaj (spam)", "r_dup": "Aynı mesajı tekrarlama (spam)",
  "r_mention": "Çok fazla etiket", "r_word": "Yasaklı kelime kullanımı",
  "r_max": "Maksimum uyarıya ulaşıldı ({max})", "r_admin": "Yönetici kararı",
@@ -954,7 +964,7 @@ def tr(cid, key, **kw):
 REPO = os.environ.get("GITHUB_REPOSITORY")
 GH = os.environ.get("GITHUB_TOKEN")
 DATA_PATH = f"data/{TOKEN.split(':')[0]}.json"
-data = {"chats": {}, "warns": {}, "pending": {}, "users": {}, "prizes": {}, "streak": {}}
+data = {"chats": {}, "warns": {}, "pending": {}, "users": {}, "prizes": {}, "streak": {}, "priv": {}}
 sha = None
 loaded = False
 dirty = False
@@ -1003,6 +1013,7 @@ def load():
         data.setdefault("users", {})
         data.setdefault("prizes", {})
         data.setdefault("streak", {})
+        data.setdefault("priv", {})
         if data.get("v", 0) < 2:  # ترحيل: إيقاف الحذف التلقائي للردود في المجموعات القديمة
             for _c in data["chats"].values():
                 _c["ttl"] = 0
@@ -1018,6 +1029,11 @@ def load():
                 if _c.get("periodic"):
                     _c["periodic"]["i"] = 0
             data["v"] = 4
+            touch()
+        if data.get("v", 0) < 5:  # قاعدة التوجيه الجديدة تُفعَّل لكل المجموعات
+            for _c in data["chats"].values():
+                _c["fwd"] = True
+            data["v"] = 5
             touch()
         loaded = True
         log.info("data loaded")
@@ -1218,6 +1234,14 @@ def btn(cid, key, cb):
     return InlineKeyboardButton(tr(cid, key), callback_data=cb)
 
 
+async def ban_now(ctx, cid, uid, name, reason):
+    """حظر مباشر بلا إنذارات (لكلمات الحظر)."""
+    await ctx.bot.ban_chat_member(cid, uid)
+    set_warns(cid, uid, 0)
+    await ctx.bot.send_message(cid, tr(cid, "banned", user=mention_id(uid, name), reason=reason), parse_mode="HTML",
+                               reply_markup=InlineKeyboardMarkup([[btn(cid, "b_unban", f"ub:{uid}")]]))
+
+
 async def punish(ctx, cid, uid, name, reason, mute_min=0):
     """تحذير + (كتم اختياري) + حظر عند بلوغ الحد الأقصى. reason نص آمن لـ HTML."""
     c = cfg(cid)
@@ -1300,6 +1324,21 @@ def check_spam(c, cid, uid, msg, n_text):
     return None
 
 
+linked_cache = {}
+
+
+async def linked_channel(ctx, cid):
+    """رقم القناة المربوطة بالمجموعة (يُحفظ 10 دقائق)."""
+    t, v = linked_cache.get(cid, (0, None))
+    if time.time() - t > 600:
+        try:
+            v = (await ctx.bot.get_chat(cid)).linked_chat_id
+        except Exception as e:
+            log.warning("linked channel lookup failed: %s", e)
+        linked_cache[cid] = (time.time(), v)
+    return v
+
+
 async def guard(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     msg, chat, user = update.effective_message, update.effective_chat, update.effective_user
     if msg and getattr(msg, "is_automatic_forward", False) and update.edited_message is None:
@@ -1316,20 +1355,30 @@ async def guard(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     viol = None  # (مفتاح السبب، مدة الكتم)
 
     if c["words"] and c["banned"] and nt:
-        best = None
+        best, hard = None, False
         for w, mins in c["banned"].items():
             if re.search(rf"(?<!\w){re.escape(w)}(?!\w)", nt):
-                best = max(best or 0, mins)
-        if best is not None:
+                if mins < 0:
+                    hard = True  # كلمة حظر مباشر
+                else:
+                    best = max(best or 0, mins)
+        if hard:
+            viol = ("r_word", -1)
+        elif best is not None:
             viol = ("r_word", best)
     if not viol and c["links"]:
         doms = extract_domains(msg, text)
         if any(not any(d == a or d.endswith("." + a) for a in c["allow"]) for d in doms):
             viol = ("r_link", 0)
     if not viol and c["promo"]:
-        fo = getattr(msg, "forward_origin", None)
-        if (fo is not None and fo.type == "channel") or (nt and PROMO_RE.search(nt)):
+        if nt and PROMO_RE.search(nt):
             viol = ("r_promo", 0)
+    if not viol and c["fwd"]:  # يُسمح فقط بما يُحوَّل من القناة المربوطة، وغيره يُمنع
+        fo = getattr(msg, "forward_origin", None)
+        if fo is not None:
+            src = getattr(getattr(fo, "chat", None), "id", None) if fo.type == "channel" else None
+            if src is None or src != await linked_channel(ctx, chat.id):
+                viol = ("r_fwd", 0)
     if c["spam"] and not edited:
         r = check_spam(c, chat.id, user.id, msg, nt)
         if r and not viol:
@@ -1346,7 +1395,10 @@ async def guard(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         log.warning("delete failed: %s", e)
     try:
-        await punish(ctx, chat.id, user.id, user.full_name, tr(chat.id, viol[0]), viol[1])
+        if viol[1] == -1:
+            await ban_now(ctx, chat.id, user.id, user.full_name, tr(chat.id, viol[0]))
+        else:
+            await punish(ctx, chat.id, user.id, user.full_name, tr(chat.id, viol[0]), viol[1])
     except Exception as e:
         log.warning("punish failed: %s", e)
 
@@ -1558,7 +1610,7 @@ async def _later_delete(msg, secs):
     await try_delete(msg)
 
 
-def make_reply(ctx, cid):
+def make_reply(ctx, cid, gid=None):
     """يرسل رد البوت دون الاعتماد على رسالة الأمر (لأنها تُحذف)، ويحذف الرد تلقائيًا."""
     async def reply(text, parse_mode=None, reply_markup=None, long=False, keep=None, ttl=None, ephemeral=None):
         if len(text) > 4000:
@@ -1567,7 +1619,7 @@ def make_reply(ctx, cid):
         if ephemeral:  # يُحذف بعد هذه المدة مهما كان إعداد الحذف التلقائي
             asyncio.create_task(_later_delete(msg, ephemeral))
             return msg
-        t = cfg(cid)["ttl"]
+        t = cfg(gid or cid)["ttl"]
         if keep is None:
             keep = reply_markup is not None
         if ttl is None:
@@ -1578,21 +1630,37 @@ def make_reply(ctx, cid):
     return reply
 
 
+BAN_TOKENS = ("ban", "حظر")
+
+
+def dur_or_ban(tok):
+    """مدة بالدقائق، أو -1 إذا كانت الكلمة ban (حظر مباشر)، أو None."""
+    if tok.lower() in BAN_TOKENS:
+        return -1
+    return parse_dur(tok)
+
+
+def wlabel(cid, v):
+    if v < 0:
+        return "🚫 " + tr(cid, "w_ban")
+    return fmt_dur(cid, v) if v else tr(cid, "w_warnonly")
+
+
 def parse_entries(body, default):
-    """كل سطر أو فاصلة = كلمة + مدة اختيارية (قبلها أو بعدها). يعيد (قاموس، عدد غير الصالح)."""
+    """كل سطر أو فاصلة = كلمة + (مدة أو ban) اختيارية قبلها أو بعدها. يعيد (قاموس، عدد غير الصالح)."""
     out, bad = {}, 0
     for item in re.split(r"[\n,،;؛]+", body):
         t = item.split()
         if not t:
             continue
         d = None
-        if len(t) == 1 and parse_dur(t[0]) is not None:
+        if len(t) == 1 and dur_or_ban(t[0]) is not None:
             bad += 1
             continue
-        if len(t) > 1 and parse_dur(t[-1]) is not None:
-            d, t = parse_dur(t[-1]), t[:-1]
-        elif len(t) > 1 and parse_dur(t[0]) is not None:
-            d, t = parse_dur(t[0]), t[1:]
+        if len(t) > 1 and dur_or_ban(t[-1]) is not None:
+            d, t = dur_or_ban(t[-1]), t[:-1]
+        elif len(t) > 1 and dur_or_ban(t[0]) is not None:
+            d, t = dur_or_ban(t[0]), t[1:]
         w = norm(" ".join(t))
         if not w:
             bad += 1
@@ -1651,7 +1719,7 @@ async def cheer_post(msg, chat):
 def words_summary(cid, entries, bad):
     items = list(entries.items())
     shown = items if len(items) <= 12 else items[:8]
-    lst = "\n".join(f"• {w} — {fmt_dur(cid, v) if v else tr(cid, 'w_warnonly')}" for w, v in shown)
+    lst = "\n".join(f"• {w} — {wlabel(cid, v)}" for w, v in shown)
     if len(items) > len(shown):
         lst += f"\n… +{len(items) - len(shown)}"
     txt = tr(cid, "words_added", n=len(entries), list=lst)
@@ -1871,8 +1939,8 @@ async def find_user(ctx, cid, uname):
     return None
 
 
-async def resolve(update, ctx, reply):
-    m, cid = update.effective_message, update.effective_chat.id
+async def resolve(update, ctx, reply, cid):
+    m = update.effective_message
     args = list(ctx.args)
     if m.reply_to_message and m.reply_to_message.from_user:
         u = m.reply_to_message.from_user
@@ -1895,11 +1963,59 @@ async def resolve(update, ctx, reply):
     return None
 
 
+async def my_groups(ctx, uid):
+    """المجموعات التي يديرها هذا المستخدم ويوجد فيها البوت."""
+    out = []
+    for k in list(data["chats"]):
+        gid = int(k)
+        if gid > 0:
+            continue
+        try:
+            if await is_admin(ctx, gid, uid):
+                out.append((gid, (await ctx.bot.get_chat(gid)).title or str(gid)))
+        except Exception:
+            pass
+    return out
+
+
+async def show_group_picker(ctx, out, mine):
+    if not mine:
+        return await ctx.bot.send_message(out, tr(None, "priv_none"))
+    kb = InlineKeyboardMarkup([[InlineKeyboardButton(t[:40], callback_data=f"sg:{g_}")] for g_, t in mine])
+    return await ctx.bot.send_message(out, tr(None, "priv_pick"), reply_markup=kb)
+
+
+async def admin_context(update, ctx):
+    """يعيد (المجموعة المستهدفة، مكان الرد). في المجموعة كلاهما المجموعة، وفي الخاص تُؤخذ المجموعة المختارة."""
+    chat, me = update.effective_chat, update.effective_user
+    if getattr(chat, "type", "") != "private":
+        return chat.id, chat.id
+    sel = data.setdefault("priv", {}).get(str(me.id))
+    if sel and await is_admin(ctx, sel, me.id):
+        return sel, chat.id
+    mine = await my_groups(ctx, me.id)
+    if len(mine) == 1:  # مجموعة واحدة: نختارها تلقائيًا
+        data["priv"][str(me.id)] = mine[0][0]
+        touch()
+        return mine[0][0], chat.id
+    await show_group_picker(ctx, chat.id, mine)
+    return None
+
+
+async def groups_cmd(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    mine = await my_groups(ctx, update.effective_user.id)
+    await show_group_picker(ctx, update.effective_chat.id, mine)
+
+
 async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     m, chat, me = update.effective_message, update.effective_chat, update.effective_user
-    cid = chat.id
-    reply = make_reply(ctx, cid)
-    await try_delete(m)  # حذف رسالة الأمر تلقائيًا
+    gc = await admin_context(update, ctx)
+    if gc is None:
+        return
+    cid, out = gc
+    reply = make_reply(ctx, out, cid)
+    if getattr(chat, "type", "") != "private":
+        await try_delete(m)  # حذف رسالة الأمر تلقائيًا
     if not await is_admin(ctx, cid, me.id):
         return await reply(tr(cid, "adm_cmd"), ephemeral=12)
     cmd = m.text.split()[0][1:].split("@")[0].lower()
@@ -1911,7 +2027,7 @@ async def mod(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 except Exception:
                     pass
         return
-    r = await resolve(update, ctx, reply)
+    r = await resolve(update, ctx, reply, cid)
     if not r:
         return
     uid, name, rest = r
@@ -1980,9 +2096,13 @@ def panel(cid):
 
 async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     m, chat, me = update.effective_message, update.effective_chat, update.effective_user
-    cid = chat.id
-    reply = make_reply(ctx, cid)
-    await try_delete(m)  # حذف رسالة الأمر تلقائيًا
+    gc = await admin_context(update, ctx)
+    if gc is None:
+        return
+    cid, out = gc
+    reply = make_reply(ctx, out, cid)
+    if getattr(chat, "type", "") != "private":
+        await try_delete(m)  # حذف رسالة الأمر تلقائيًا
     cmd = m.text.split()[0][1:].split("@")[0].lower()
     if cmd == "rules":  # الأمر الوحيد المتاح للأعضاء
         r = cfg(cid)["rules"]
@@ -2051,16 +2171,19 @@ async def conf(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if cmd == "words":
         if not c["banned"]:
             return await reply(tr(cid, "no_words"))
-        lines = [f"• {w} — {fmt_dur(cid, v) if v else tr(cid, 'w_warnonly')}" for w, v in c["banned"].items()]
-        chunks, cur = [], ""
-        for ln in lines:
-            if len(cur) + len(ln) + 1 > 3300:
+        for key, items in (("words", [(w, v) for w, v in c["banned"].items() if v >= 0]),
+                           ("words_ban", [(w, v) for w, v in c["banned"].items() if v < 0])):
+            lines = [f"• {w} — {wlabel(cid, v)}" if v >= 0 else f"• {w}" for w, v in items]
+            chunks, cur = [], ""
+            for ln in lines:
+                if len(cur) + len(ln) + 1 > 3300:
+                    chunks.append(cur)
+                    cur = ""
+                cur += ln + "\n"
+            if cur:
                 chunks.append(cur)
-                cur = ""
-            cur += ln + "\n"
-        chunks.append(cur)
-        for ch in chunks:
-            await reply(tr(cid, "words", list=ch.rstrip()), long=True)
+            for ch in chunks:
+                await reply(tr(cid, key, list=ch.rstrip()), long=True)
         return
     if cmd in ("allow", "disallow"):
         if not a:
@@ -2214,8 +2337,24 @@ async def buttons(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
     if not q.message:
         return await q.answer()
-    cid = q.message.chat.id
     act, _, arg = q.data.partition(":")
+    if act == "sg":  # اختيار المجموعة في الخاص
+        gid = int(arg)
+        if not await is_admin(ctx, gid, q.from_user.id):
+            return await q.answer(tr(None, "adm_only"), show_alert=True)
+        data.setdefault("priv", {})[str(q.from_user.id)] = gid
+        touch()
+        try:
+            title = (await ctx.bot.get_chat(gid)).title or ""
+        except Exception:
+            title = ""
+        await q.edit_message_text(tr(gid, "priv_sel", title=title))
+        return await q.answer()
+    cid = q.message.chat.id
+    if getattr(q.message.chat, "type", "") == "private":  # أزرار لوحة الإعدادات داخل الخاص
+        cid = data.get("priv", {}).get(str(q.from_user.id))
+        if cid is None:
+            return await q.answer()
     if act == "cv":  # زر التحقق: لصاحبه فقط (أو لأي مشرف)
         return await captcha_press(ctx, q, cid, int(arg))
     if act == "pz":  # زر جائزة الوسم: للفائز فقط
@@ -2333,8 +2472,17 @@ app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword"
                                 "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules", "setwordmute", "setautodel",
                                 "periodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setcaptcha", "clearwords", "addreply", "delreply", "replies", "setstreak", "settz"],
                                conf, G))
+
+# نفس الأوامر تعمل في الخاص مع البوت (للمشرفين فقط) لضبط المجموعة دون ازدحام
+PRIV = filters.ChatType.PRIVATE
+app.add_handler(CommandHandler(["ban", "unban", "kick", "mute", "unmute", "warn", "unwarn", "resetwarns",
+                                "reset", "warns", "del"], mod, PRIV))
+app.add_handler(CommandHandler(["settings", "lang", "help", "addword", "delword", "words", "allow", "disallow",
+                                "setwelcome", "setbye", "setwelcomemedia", "setbyemedia", "setwarns", "setspam", "about", "rules", "setrules", "setwordmute", "setautodel",
+                                "periodic", "setwelcomebuttons", "setbyebuttons", "setperiodicbuttons", "setcaptcha", "clearwords", "addreply", "delreply", "replies", "setstreak", "settz"], conf, PRIV))
+app.add_handler(CommandHandler(["groups", "select"], groups_cmd, PRIV))
 app.add_handler(MessageHandler(G & filters.Document.ALL & filters.CaptionRegex(r"^/addword(@\w+)?(\s|$)"), addword_file))
-app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg|cv|pz|wn|cwy|cwn|noop):"))
+app.add_handler(CallbackQueryHandler(buttons, pattern=r"^(um|ub|rw|tg|lg|cv|pz|sg|wn|cwy|cwn|noop):"))
 app.add_handler(MessageHandler(filters.ChatType.PRIVATE & (filters.PHOTO | filters.ANIMATION | filters.VIDEO |
                                                            filters.Sticker.ALL), get_id))
 app.add_handler(MessageHandler(G & ~filters.COMMAND & ~filters.StatusUpdate.ALL, guard), group=1)
