@@ -38,7 +38,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1003920369160": {
    "lang": "ar",
@@ -81,7 +82,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1004294939299": {
    "lang": "ar",
@@ -124,7 +126,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1004347779307": {
    "lang": "ar",
@@ -166,7 +169,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1003831778186": {
    "lang": "ar",
@@ -209,7 +213,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1003851080521": {
    "lang": "ar",
@@ -552,7 +557,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1004402511210": {
    "lang": "ar",
@@ -592,7 +598,8 @@
    "rewards": true,
    "streak_days": 4,
    "tz": 3,
-   "replies": {}
+   "replies": {},
+   "fwd": true
   },
   "-1003573588732": {
    "lang": "ar",
@@ -903,7 +910,8 @@
     "القوانين": "تفضل يا عزيزي (https://t.me/Incertus_Discuss/250) 😁",
     "مالك المجموعه": "هذا هو مالك المجموعة @NullZzz_zzZ",
     "خط الايفون مدمج مع ايموجي جوجل": "تفضل يا عزيزي (https://t.me/Incertus_Discuss/702) 😁"
-   }
+   },
+   "fwd": true
   }
  },
  "warns": {
@@ -911,7 +919,7 @@
   "-1003573588732:8390019729": 2,
   "-1003573588732:8939960590": 1
  },
- "v": 4,
+ "v": 5,
  "unames": {},
  "pending": {},
  "users": {
@@ -1206,5 +1214,6 @@
    "d": 20781,
    "n": 1
   }
- }
+ },
+ "priv": {}
 }
