@@ -31,6 +31,8 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN_BMVIPD70T }}
           GITHUB_TOKEN: ${{ github.token }}
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
         run: |
           start=$(date +%s)
           timeout 340m python bot.py || true
